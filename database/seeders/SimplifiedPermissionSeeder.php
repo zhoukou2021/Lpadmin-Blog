@@ -52,17 +52,56 @@ class SimplifiedPermissionSeeder extends Seeder
      */
     private function cleanupExistingData(): void
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        try {
+            // 清理关联表
+            DB::table('admin_roles')->truncate();
+            DB::table('role_rules')->truncate();
+            DB::table('dictionary_items')->truncate();
+
+            // 清理主表（注意：有外键约束的表需要特殊处理）
+            DB::table('admins')->truncate();
+            DB::table('roles')->truncate();
+            DB::table('rules')->truncate();
+            DB::table('options')->truncate();
+            DB::table('dictionaries')->truncate();
+        } catch (\Exception) {
+            // 如果TRUNCATE失败，使用DELETE方式
+            $this->cleanupWithDelete();
+        } finally {
+            // 重新启用外键检查
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        }
+    }
+
+    /**
+     * 使用DELETE方式清理数据（备选方案）
+     */
+    private function cleanupWithDelete(): void
+    {
         // 清理关联表
-        DB::table('admin_roles')->truncate();
-        DB::table('role_rules')->truncate();
+        DB::table('admin_roles')->delete();
+        DB::table('role_rules')->delete();
+        DB::table('dictionary_items')->delete();
 
         // 清理主表
-        DB::table('admins')->truncate();
-        DB::table('roles')->truncate();
-        DB::table('rules')->truncate();
-        DB::table('options')->truncate();
-        DB::table('dictionaries')->truncate();
-        DB::table('dictionary_items')->truncate();
+        DB::table('admins')->delete();
+        DB::table('roles')->delete();
+        DB::table('rules')->delete();
+        DB::table('options')->delete();
+        DB::table('dictionaries')->delete();
+
+        // 重置自增ID（可选）
+        DB::statement('ALTER TABLE admin_roles AUTO_INCREMENT = 1');
+        DB::statement('ALTER TABLE role_rules AUTO_INCREMENT = 1');
+        DB::statement('ALTER TABLE dictionary_items AUTO_INCREMENT = 1');
+        DB::statement('ALTER TABLE admin_logs AUTO_INCREMENT = 1');
+        DB::statement('ALTER TABLE admins AUTO_INCREMENT = 1');
+        DB::statement('ALTER TABLE roles AUTO_INCREMENT = 1');
+        DB::statement('ALTER TABLE rules AUTO_INCREMENT = 1');
+        DB::statement('ALTER TABLE options AUTO_INCREMENT = 1');
+        DB::statement('ALTER TABLE dictionaries AUTO_INCREMENT = 1');
     }
 
     /**

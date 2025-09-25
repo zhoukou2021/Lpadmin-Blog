@@ -70,7 +70,7 @@ class SystemLogComponent
         if (!Schema::hasTable('admin_logs')) {
             // 运行迁移
             Artisan::call('migrate', [
-                '--path' => 'database/migrations/2025_09_16_090356_create_lp_admin_logs_table.php',
+                '--path' => 'app\Components\SystemLog\database\migrations\2025_09_16_090356_create_lp_admin_logs_table.php',
                 '--force' => true
             ]);
         }

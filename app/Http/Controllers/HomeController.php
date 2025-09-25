@@ -22,7 +22,10 @@ class HomeController extends Controller
         // 获取核心功能信息
         $coreFeatures = $this->getCoreFeatures();
 
-        return view('home.index', compact('systemInfo', 'coreFeatures'));
+        // 获取文档列表
+        $documentationList = $this->getDocumentationList();
+
+        return view('home.index', compact('systemInfo', 'coreFeatures', 'documentationList'));
     }
 
     /**
@@ -126,5 +129,87 @@ class HomeController extends Controller
         ];
     }
 
+    /**
+     * 获取文档列表
+     *
+     * @return array
+     */
+    private function getDocumentationList(): array
+    {
+        return [
+            [
+                'title' => '项目介绍',
+                'description' => '了解LPadmin系统的核心特性、功能模块和技术架构',
+                'icon' => 'fas fa-info-circle',
+                'file' => 'README.md',
+                'type' => '概述',
+                'updated' => '2024-09-25'
+            ],
+            [
+                'title' => '快速开始',
+                'description' => '5分钟快速上手指南，快速体验系统核心功能',
+                'icon' => 'fas fa-rocket',
+                'file' => 'QUICKSTART.md',
+                'type' => '入门',
+                'updated' => '2024-09-25'
+            ],
+            [
+                'title' => '安装指南',
+                'description' => '详细的环境要求、安装步骤和配置说明',
+                'icon' => 'fas fa-download',
+                'file' => 'INSTALL.md',
+                'type' => '安装',
+                'updated' => '2024-09-25'
+            ],
+            [
+                'title' => '开发文档',
+                'description' => '开发规范、代码结构、扩展开发等详细说明',
+                'icon' => 'fas fa-code',
+                'file' => 'DEVELOPMENT.md',
+                'type' => '开发',
+                'updated' => '2024-09-25'
+            ],
+            [
+                'title' => 'API接口',
+                'description' => '完整的API接口文档，包含请求参数和响应示例',
+                'icon' => 'fas fa-plug',
+                'file' => 'API.md',
+                'type' => '接口',
+                'updated' => '2024-09-25'
+            ],
+            [
+                'title' => '部署指南',
+                'description' => '生产环境部署、性能优化和运维管理指南',
+                'icon' => 'fas fa-server',
+                'file' => 'DEPLOYMENT.md',
+                'type' => '部署',
+                'updated' => '2024-09-25'
+            ],
+            [
+                'title' => '数据库设计',
+                'description' => '详细的数据表结构设计和关联关系说明',
+                'icon' => 'fas fa-database',
+                'file' => 'architecture/database-design.md',
+                'type' => '架构',
+                'updated' => '2024-09-25'
+            ],
+            [
+                'title' => '权限系统',
+                'description' => 'RBAC权限系统的设计原理和使用方法',
+                'icon' => 'fas fa-shield-alt',
+                'file' => 'architecture/permission-system.md',
+                'type' => '架构',
+                'updated' => '2024-09-25'
+            ],
+            [
+                'title' => '更新日志',
+                'description' => '版本更新记录、新功能介绍和问题修复说明',
+                'icon' => 'fas fa-history',
+                'file' => 'CHANGELOG.md',
+                'type' => '日志',
+                'updated' => '2024-09-25'
+            ]
+        ];
+    }
 
 }

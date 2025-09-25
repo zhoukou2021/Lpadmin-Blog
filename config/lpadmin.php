@@ -125,12 +125,12 @@ return [
         'logo' => env('LPADMIN_LOGO', '/static/admin/images/logo.png'),
         'copyright' => env('LPADMIN_COPYRIGHT', 'LPadmin'),
         'contact' => [
-            'email' => env('LPADMIN_CONTACT_EMAIL', 'jiu-men@qq.com'),
-            'phone' => env('LPADMIN_CONTACT_PHONE', '+86 15737185084'),
+            'email' => env('LPADMIN_CONTACT_EMAIL', 'jiu-men##qq.com'),
+            'phone' => env('LPADMIN_CONTACT_PHONE', '+86 157 / 3718 / 5084'),
             'address' => env('LPADMIN_CONTACT_ADDRESS', '中国·北京'),
         ],
         'social' => [
-            'github' => env('LPADMIN_GITHUB', '#'),
+            'github' => env('LPADMIN_GITHUB', 'https://gitee.com/xw54/lpadmin'),
             'qq' => env('LPADMIN_QQ', '446820025'),
             'wechat' => env('LPADMIN_WECHAT', 'Baron369'),
         ],
