@@ -76,6 +76,7 @@ class ComponentController extends BaseController
                 $this->log('install', '安装组件', ['component' => $componentName]);
                 return $this->success(null, '组件安装成功');
             } else {
+                $this->log('install fail', '安装组件', ['component' => $componentName,'result'=>$result]);
                 return $this->error('组件安装失败');
             }
             

@@ -150,53 +150,61 @@ class ComponentManager
     
     /**
      * 安装组件
-     * 
+     *
      * @param string $componentName
      * @return bool
      */
     public static function installComponent(string $componentName): bool
     {
         try {
-            DB::beginTransaction();
-            
             $componentPath = base_path(self::COMPONENTS_PATH . '/' . $componentName);
             $componentInfo = self::getComponentInfo($componentPath);
-            
+
             if (!$componentInfo) {
                 throw new Exception("组件配置文件不存在或格式错误");
             }
-            
-            // 运行数据库迁移
-            self::runMigrations($componentName);
-            
-            // 注册组件路由
+
+            // 使用单一事务处理所有数据库操作
+            DB::transaction(function () use ($componentName) {
+                // 1. 运行数据库迁移
+                self::runMigrations($componentName);
+
+                // 2. 执行组件安装钩子（包含权限创建等数据库操作）
+                self::executeInstallHook($componentName);
+
+                // 3. 更新组件状态
+                self::updateComponentStatus($componentName, self::STATUS_INSTALLED);
+            });
+
+            // 4. 注册组件路由（非数据库操作）
             self::registerComponentRoutes($componentName, $componentInfo);
 
-            // 注册服务提供者
+            // 5. 注册服务提供者（非数据库操作）
             self::registerServiceProvider($componentName);
 
-            // 执行组件安装钩子
-            self::executeInstallHook($componentName);
-
-            // 更新组件状态
-            self::updateComponentStatus($componentName, self::STATUS_INSTALLED);
-            
-            // 清除路由缓存
+            // 6. 清除缓存
             Artisan::call('route:clear');
-            
-            // 清除组件缓存
             Cache::forget(self::CACHE_KEY);
-            
-            DB::commit();
-            
+
             Log::info("组件安装成功: {$componentName}");
             return true;
-            
+
         } catch (Exception $e) {
-            DB::rollBack();
             Log::error("组件安装失败: {$componentName}", [
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
+
+            // 组件安装失败时的回滚处理
+            try {
+                self::executeUninstallHook($componentName);
+                self::deleteComponentRecord($componentName);
+            } catch (Exception $rollbackException) {
+                Log::error("组件安装回滚失败: {$componentName}", [
+                    'error' => $rollbackException->getMessage()
+                ]);
+            }
+
             return false;
         }
     }
@@ -342,11 +350,11 @@ class ComponentManager
         $component = Component::findByName($componentName);
 
         if ($component) {
-            if ($status === self::STATUS_INSTALLED) {
-                $component->install();
-            } else {
-                $component->uninstall();
-            }
+            // 直接使用update方法，避免调用模型的install/uninstall方法
+            $component->update([
+                'status' => $status,
+                'installed_at' => $status === self::STATUS_INSTALLED ? now() : null,
+            ]);
         } else {
             // 如果组件不存在，创建新记录
             $componentPath = base_path(self::COMPONENTS_PATH . '/' . $componentName);
