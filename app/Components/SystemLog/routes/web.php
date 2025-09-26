@@ -14,7 +14,7 @@ use App\Components\SystemLog\Controllers\SystemLogController;
 
 Route::prefix('system-log')->name('system-log.')->group(function () {
     // 日志列表
-    Route::get('system-log', [SystemLogController::class, 'index'])->name('index');
+    Route::get('/', [SystemLogController::class, 'index'])->name('index');
     
     // 日志详情
     Route::get('{log}', [SystemLogController::class, 'show'])->name('show');
