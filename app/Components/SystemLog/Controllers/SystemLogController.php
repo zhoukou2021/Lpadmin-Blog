@@ -6,7 +6,7 @@ use App\Http\Controllers\LPadmin\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
-use App\Models\LPadmin\AdminLog;
+use App\Components\SystemLog\Models\AdminLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 

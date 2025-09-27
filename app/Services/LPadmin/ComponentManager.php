@@ -164,26 +164,24 @@ class ComponentManager
                 throw new Exception("组件配置文件不存在或格式错误");
             }
 
-            // 分步执行，每个步骤自己管理事务
+            // 分步骤执行，避免事务嵌套问题
 
-            // 1. 运行数据库迁移（迁移命令自己管理事务）
+            // 1. 运行数据库迁移（独立执行，避免事务冲突）
             self::runMigrations($componentName);
 
-            // 2. 执行组件安装钩子（包含权限创建等数据库操作）
-            self::executeInstallHook($componentName);
-
-            // 3. 更新组件状态（使用独立事务）
+            // 2. 执行组件安装钩子和更新状态（在事务中）
             DB::transaction(function () use ($componentName) {
+                self::executeInstallHook($componentName);
                 self::updateComponentStatus($componentName, self::STATUS_INSTALLED);
             });
 
-            // 4. 注册组件路由（非数据库操作）
+            // 3. 注册组件路由（非数据库操作）
             self::registerComponentRoutes($componentName, $componentInfo);
 
-            // 5. 注册服务提供者（非数据库操作）
+            // 4. 注册服务提供者（非数据库操作）
             self::registerServiceProvider($componentName);
 
-            // 6. 清除缓存
+            // 5. 清除缓存
             Artisan::call('route:clear');
             Cache::forget(self::CACHE_KEY);
 
@@ -196,12 +194,14 @@ class ComponentManager
                 'trace' => $e->getTraceAsString()
             ]);
 
-            // 组件安装失败时的回滚处理
+            // 组件安装失败时的清理处理（事务已自动回滚）
             try {
-                self::executeUninstallHook($componentName);
+                // 清理可能已注册的路由和服务
+                self::unregisterComponentRoutes($componentName);
                 self::deleteComponentRecord($componentName);
+                Cache::forget(self::CACHE_KEY);
             } catch (Exception $rollbackException) {
-                Log::error("组件安装回滚失败: {$componentName}", [
+                Log::error("组件安装清理失败: {$componentName}", [
                     'error' => $rollbackException->getMessage()
                 ]);
             }
@@ -212,40 +212,35 @@ class ComponentManager
     
     /**
      * 卸载组件
-     * 
+     *
      * @param string $componentName
      * @return bool
      */
     public static function uninstallComponent(string $componentName): bool
     {
         try {
-            DB::beginTransaction();
+            // 分步骤执行，避免事务嵌套问题
 
-            // 执行组件卸载钩子
-            self::executeUninstallHook($componentName);
+            // 1. 执行组件卸载钩子（在事务中）
+            DB::transaction(function () use ($componentName) {
+                self::executeUninstallHook($componentName);
+                self::deleteComponentRecord($componentName);
+            });
 
-            // 回滚数据库迁移
+            // 2. 回滚数据库迁移（独立执行，避免事务冲突）
             self::rollbackMigrations($componentName);
 
-            // 注销组件路由
+            // 3. 注销组件路由（非数据库操作）
             self::unregisterComponentRoutes($componentName);
 
-            // 删除组件记录（不使用软删除）
-            self::deleteComponentRecord($componentName);
-            
-            // 清除路由缓存
+            // 4. 清除缓存（非数据库操作）
             Artisan::call('route:clear');
-            
-            // 清除组件缓存
             Cache::forget(self::CACHE_KEY);
-            
-            DB::commit();
-            
+
             Log::info("组件卸载成功: {$componentName}");
             return true;
-            
+
         } catch (Exception $e) {
-            DB::rollBack();
             Log::error("组件卸载失败: {$componentName}", [
                 'error' => $e->getMessage()
             ]);
@@ -273,7 +268,7 @@ class ComponentManager
      * 
      * @param string $componentName
      */
-    protected static function runMigrations(string $componentName): void
+    public static function runMigrations(string $componentName): void
     {
         $migrationsPath = base_path(self::COMPONENTS_PATH . '/' . $componentName . '/database/migrations');
         
@@ -286,16 +281,45 @@ class ComponentManager
     
     /**
      * 回滚组件数据库迁移
-     * 
+     *
      * @param string $componentName
      */
     protected static function rollbackMigrations(string $componentName): void
     {
         $migrationsPath = base_path(self::COMPONENTS_PATH . '/' . $componentName . '/database/migrations');
-        
+
         if (File::exists($migrationsPath)) {
-            // 这里可以实现更精确的回滚逻辑
-            Log::info("回滚组件迁移: {$componentName}");
+            try {
+                // 获取组件相关的迁移记录
+                $migrationFiles = File::files($migrationsPath);
+
+                foreach (array_reverse($migrationFiles) as $file) {
+                    $migrationName = pathinfo($file, PATHINFO_FILENAME);
+
+                    // 检查迁移是否已执行
+                    $executed = DB::table('migrations')
+                        ->where('migration', $migrationName)
+                        ->exists();
+
+                    if ($executed) {
+                        // 执行回滚
+                        Artisan::call('migrate:rollback', [
+                            '--path' => 'app/Components/' . $componentName . '/database/migrations',
+                            '--step' => 1
+                        ]);
+
+                        Log::info("回滚迁移成功: {$migrationName}");
+                    }
+                }
+
+                Log::info("组件迁移回滚完成: {$componentName}");
+
+            } catch (Exception $e) {
+                Log::error("组件迁移回滚失败: {$componentName}", [
+                    'error' => $e->getMessage()
+                ]);
+                throw $e;
+            }
         }
     }
     

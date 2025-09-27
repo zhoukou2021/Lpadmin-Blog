@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+use App\Components\SystemLog\Models\AdminLog;
 
 /**
  * 管理员操作日志服务
@@ -51,7 +52,7 @@ class AdminLogService
             $requestData = self::filterSensitiveData($request->all());
             
             // 插入日志记录
-            DB::table('admin_logs')->insert([
+            AdminLog::create([
                 'admin_id' => $adminId,
                 'admin_username' => $adminUsername,
                 'action' => $action,

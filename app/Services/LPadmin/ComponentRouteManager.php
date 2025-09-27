@@ -35,8 +35,6 @@ class ComponentRouteManager
         foreach ($config as $componentDir => $componentConfig) {
             self::registerComponentRoute($componentDir, $componentConfig);
         }
-        
-        Log::info('所有组件路由注册完成', ['count' => count($config)]);
     }
     
     /**
