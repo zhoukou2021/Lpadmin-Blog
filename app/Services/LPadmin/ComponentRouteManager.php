@@ -67,7 +67,6 @@ class ComponentRouteManager
                 ->prefix('lpadmin')
                 ->name('lpadmin.')
                 ->group(function () use ($routesPath, $componentDir) {
-                    Log::debug("注册组件路由: {$componentDir}");
                     include $routesPath;
                 });
             
@@ -310,7 +309,6 @@ class ComponentRouteManager
         if (class_exists($providerClass)) {
             try {
                 app()->register($providerClass);
-                Log::debug("组件服务提供者注册成功: {$providerClass}");
             } catch (Exception $e) {
                 Log::warning("组件服务提供者注册失败: {$providerClass}", [
                     'error' => $e->getMessage()

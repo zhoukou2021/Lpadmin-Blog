@@ -363,7 +363,6 @@ class ComponentManager
         ];
 
         ComponentRouteManager::addComponentRouteConfig($componentName, $config);
-        Log::info("注册组件路由: {$componentName}");
     }
 
     /**
@@ -450,7 +449,6 @@ class ComponentManager
         if (class_exists($providerClass)) {
             try {
                 app()->register($providerClass);
-                Log::info("组件服务提供者注册成功: {$providerClass}");
             } catch (Exception $e) {
                 Log::warning("组件服务提供者注册失败: {$providerClass}", [
                     'error' => $e->getMessage()
