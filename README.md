@@ -325,6 +325,55 @@ location / {
 
 > ⚠️ **安全提示**: 首次登录后请立即修改默认密码！
 
+8. **配置定时任务（自动生成文章）**
+
+要让自动生成文章功能正常工作，需要配置 Cron Job：
+
+**Linux/Unix 系统：**
+
+编辑 crontab：
+```bash
+crontab -e
+```
+
+添加以下行（每分钟执行一次 Laravel 调度器）：
+```bash
+* * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+**Windows 系统：**
+
+使用任务计划程序（Task Scheduler）：
+1. 打开任务计划程序
+2. 创建基本任务
+3. 触发器：每天或指定时间
+4. 操作：启动程序
+5. 程序：`php.exe`
+6. 参数：`artisan schedule:run`
+7. 起始于：项目根目录路径
+
+**验证定时任务：**
+
+手动测试命令：
+```bash
+php artisan articles:generate --count=1
+```
+
+查看日志：
+```bash
+tail -f storage/logs/articles-generate.log
+```
+
+**配置说明：**
+
+1. 在后台 `lpadmin/blog/deepseek/config` 页面：
+   - ✅ 开启"开启自动生成"
+   - ✅ 开启"自动发布"（如果希望生成的文章自动发布）
+   - 设置"最少生成条数"和"最多生成条数"
+   - 配置 DeepSeek API Key
+
+2. 定时任务会在每天凌晨 2:00 执行（可在 `app/Console/Kernel.php` 中修改时间）
+
 ---
 
 ## 项目结构

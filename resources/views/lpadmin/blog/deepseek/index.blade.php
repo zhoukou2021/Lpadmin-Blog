@@ -132,7 +132,7 @@
 
                 <div class="config-form-item">
                     <label>
-                        <input type="checkbox" name="deepseek_auto_enabled" value="1" lay-skin="switch" lay-text="开启|关闭" {{ ($options->where('name', 'deepseek_auto_enabled')->first()->value ?? '0') === '1' ? 'checked' : '' }}>
+                        <input type="checkbox" name="deepseek_auto_enabled" value="1" lay-skin="switch" lay-filter="deepseek_auto_enabled" lay-text="开启|关闭" {{ ($options->where('name', 'deepseek_auto_enabled')->first()->value ?? '0') === '1' ? 'checked' : '' }}>
                         开启自动生成
                     </label>
                     <div class="description">是否开启每天自动生成文章</div>
@@ -140,7 +140,7 @@
 
                 <div class="config-form-item">
                     <label>
-                        <input type="checkbox" name="deepseek_auto_publish" value="1" lay-skin="switch" lay-text="开启|关闭" {{ ($options->where('name', 'deepseek_auto_publish')->first()->value ?? '0') === '1' ? 'checked' : '' }}>
+                        <input type="checkbox" name="deepseek_auto_publish" value="1" lay-skin="switch" lay-filter="deepseek_auto_publish" lay-text="开启|关闭" {{ ($options->where('name', 'deepseek_auto_publish')->first()->value ?? '0') === '1' ? 'checked' : '' }}>
                         自动发布
                     </label>
                     <div class="description">生成的文章是否自动发布（否则保存为草稿）</div>
@@ -268,23 +268,44 @@
             var form = layui.form;
             var layer = layui.layer;
             var $ = layui.$;
+            
+            // 存储开关状态（用于在提交时获取最新值）
+            var switchStates = {};
+
+            // 监听开关变化事件，实时更新状态
+            form.on('switch(deepseek_auto_enabled)', function(data){
+                switchStates.deepseek_auto_enabled = data.elem.checked ? '1' : '0';
+                console.log('开关状态更新 - deepseek_auto_enabled:', switchStates.deepseek_auto_enabled);
+            });
+            
+            form.on('switch(deepseek_auto_publish)', function(data){
+                switchStates.deepseek_auto_publish = data.elem.checked ? '1' : '0';
+                console.log('开关状态更新 - deepseek_auto_publish:', switchStates.deepseek_auto_publish);
+            });
 
             // 保存配置
             form.on('submit(save-config)', function(data){
                 var formData = data.field;
                 
-                // 处理开关值：转换为字符串 "1" 或 "0"（Laravel boolean 验证更兼容这种方式）
-                if (formData.deepseek_auto_enabled === undefined || formData.deepseek_auto_enabled === null || formData.deepseek_auto_enabled === '') {
-                    formData.deepseek_auto_enabled = '0';
+                // 方法1：优先使用 switch 事件中存储的状态
+                if (switchStates.deepseek_auto_enabled !== undefined) {
+                    formData.deepseek_auto_enabled = switchStates.deepseek_auto_enabled;
                 } else {
-                    formData.deepseek_auto_enabled = (formData.deepseek_auto_enabled === '1' || formData.deepseek_auto_enabled === true || formData.deepseek_auto_enabled === 'true') ? '1' : '0';
+                    // 方法2：如果事件未触发，直接从 DOM 读取
+                    var autoEnabledCheckbox = $('input[name="deepseek_auto_enabled"]');
+                    formData.deepseek_auto_enabled = autoEnabledCheckbox.prop('checked') ? '1' : '0';
                 }
                 
-                if (formData.deepseek_auto_publish === undefined || formData.deepseek_auto_publish === null || formData.deepseek_auto_publish === '') {
-                    formData.deepseek_auto_publish = '0';
+                if (switchStates.deepseek_auto_publish !== undefined) {
+                    formData.deepseek_auto_publish = switchStates.deepseek_auto_publish;
                 } else {
-                    formData.deepseek_auto_publish = (formData.deepseek_auto_publish === '1' || formData.deepseek_auto_publish === true || formData.deepseek_auto_publish === 'true') ? '1' : '0';
+                    // 方法2：如果事件未触发，直接从 DOM 读取
+                    var autoPublishCheckbox = $('input[name="deepseek_auto_publish"]');
+                    formData.deepseek_auto_publish = autoPublishCheckbox.prop('checked') ? '1' : '0';
                 }
+                
+                // 调试：查看处理后的完整数据
+                console.log('最终提交的表单数据:', formData);
 
                 $.ajax({
                     url: '{{ route("lpadmin.blog.deepseek.config.store") }}',
