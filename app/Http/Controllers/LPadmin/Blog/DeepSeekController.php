@@ -43,10 +43,30 @@ class DeepSeekController extends BaseController
      */
     public function store(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
+        // 处理布尔值字段，确保它们存在并转换为标准格式
+        $input = $request->all();
+        
+        // 记录原始数据用于调试
+        Log::debug('DeepSeek 配置保存 - 原始数据', ['input' => $input]);
+        
+        if (!isset($input['deepseek_auto_enabled'])) {
+            $input['deepseek_auto_enabled'] = '0';
+        }
+        if (!isset($input['deepseek_auto_publish'])) {
+            $input['deepseek_auto_publish'] = '0';
+        }
+        
+        // 将布尔值转换为字符串 "1" 或 "0"，Laravel boolean 验证支持这种格式
+        $input['deepseek_auto_enabled'] = in_array($input['deepseek_auto_enabled'], ['1', 1, true, 'true', 'on', 'yes'], true) ? '1' : '0';
+        $input['deepseek_auto_publish'] = in_array($input['deepseek_auto_publish'], ['1', 1, true, 'true', 'on', 'yes'], true) ? '1' : '0';
+        
+        // 记录转换后的数据
+        Log::debug('DeepSeek 配置保存 - 转换后数据', ['input' => $input]);
+        
+        $validator = Validator::make($input, [
             'deepseek_api_key' => 'nullable|string',
-            'deepseek_auto_enabled' => 'nullable|boolean',
-            'deepseek_auto_publish' => 'nullable|boolean',
+            'deepseek_auto_enabled' => 'required|boolean',
+            'deepseek_auto_publish' => 'required|boolean',
             'deepseek_daily_count_min' => 'nullable|integer|min:1',
             'deepseek_daily_count_max' => 'nullable|integer|min:1|gte:deepseek_daily_count_min',
             'deepseek_keywords' => 'nullable|string',
@@ -57,22 +77,19 @@ class DeepSeekController extends BaseController
         ]);
 
         if ($validator->fails()) {
+            // 记录验证错误详情
+            Log::debug('DeepSeek 配置保存 - 验证失败', [
+                'errors' => $validator->errors()->toArray(),
+                'input' => $input
+            ]);
             return $this->error($validator->errors()->first());
         }
 
         try {
-            $data = $request->only([
-                'deepseek_api_key',
-                'deepseek_auto_enabled',
-                'deepseek_auto_publish',
-                'deepseek_daily_count_min',
-                'deepseek_daily_count_max',
-                'deepseek_keywords',
-                'deepseek_prompt_rules',
-                'deepseek_model',
-            ]);
-
-            foreach ($data as $name => $value) {
+            // 使用验证后的数据
+            $validated = $validator->validated();
+            
+            foreach ($validated as $name => $value) {
                 if ($value !== null) {
                     // 处理布尔值
                     if (in_array($name, ['deepseek_auto_enabled', 'deepseek_auto_publish'])) {

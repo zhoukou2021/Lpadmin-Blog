@@ -318,6 +318,11 @@ location / {
 - 用户名: `admin`
 - 密码: `123456`
 
+演示地址：
+- http://www.code120.cn/lpadmin
+- 用户名: `admin`
+- 密码: `123456`
+
 > ⚠️ **安全提示**: 首次登录后请立即修改默认密码！
 
 ---
@@ -712,10 +717,6 @@ php artisan db:seed --class=BlogDemoSeeder
 - ✅ 后台管理系统
 - ✅ AI文章生成（DeepSeek集成）
 
-### 后续版本
-
-查看 [CHANGELOG.md](CHANGELOG.md) 了解详细更新日志。
-
 ---
 
 ## 许可证
@@ -728,7 +729,7 @@ php artisan db:seed --class=BlogDemoSeeder
 
 - 📧 邮箱: jiu-men@qq.com
 - 📖 文档: [项目文档](docs/)
-- 🐛 问题反馈: [Issues](https://gitee.com/xw54/lpadmin/issues)
+- 🐛 问题反馈: [Issues](https://gitee.com/xw54/LPadmin-Blog/issues)
 
 ---
 

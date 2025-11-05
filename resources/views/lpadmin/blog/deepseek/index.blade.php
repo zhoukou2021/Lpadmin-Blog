@@ -273,9 +273,18 @@
             form.on('submit(save-config)', function(data){
                 var formData = data.field;
                 
-                // 处理开关值
-                formData.deepseek_auto_enabled = formData.deepseek_auto_enabled === '1' ? true : false;
-                formData.deepseek_auto_publish = formData.deepseek_auto_publish === '1' ? true : false;
+                // 处理开关值：转换为字符串 "1" 或 "0"（Laravel boolean 验证更兼容这种方式）
+                if (formData.deepseek_auto_enabled === undefined || formData.deepseek_auto_enabled === null || formData.deepseek_auto_enabled === '') {
+                    formData.deepseek_auto_enabled = '0';
+                } else {
+                    formData.deepseek_auto_enabled = (formData.deepseek_auto_enabled === '1' || formData.deepseek_auto_enabled === true || formData.deepseek_auto_enabled === 'true') ? '1' : '0';
+                }
+                
+                if (formData.deepseek_auto_publish === undefined || formData.deepseek_auto_publish === null || formData.deepseek_auto_publish === '') {
+                    formData.deepseek_auto_publish = '0';
+                } else {
+                    formData.deepseek_auto_publish = (formData.deepseek_auto_publish === '1' || formData.deepseek_auto_publish === true || formData.deepseek_auto_publish === 'true') ? '1' : '0';
+                }
 
                 $.ajax({
                     url: '{{ route("lpadmin.blog.deepseek.config.store") }}',
