@@ -70,11 +70,23 @@ class CacheController extends BaseController
 
             $this->log('system', '清除所有缓存', $result['details']);
 
-            if ($result['success']) {
-                return $this->success($result, $result['message']);
-            } else {
-                return $this->error($result['message'], $result['details']);
+            // 兼容“部分成功”的场景：有成功项则按成功返回，前端以消息提示失败项
+            $items = $result['details'] ?? ($result['data'] ?? []);
+            $total = is_array($items) ? count($items) : 0;
+            $successCount = 0;
+            if (is_array($items)) {
+                foreach ($items as $item) {
+                    if (is_array($item) && ($item['success'] ?? false)) {
+                        $successCount++;
+                    }
+                }
             }
+
+            if (($result['success'] ?? false) || ($total > 0 && $successCount > 0)) {
+                return $this->success($result, $result['message'] ?? '缓存清除完成');
+            }
+
+            return $this->error($result['message'] ?? '缓存清除失败', 400, $result['details'] ?? null);
         } catch (\Exception $e) {
             return $this->error('缓存清除失败: ' . $e->getMessage());
         }

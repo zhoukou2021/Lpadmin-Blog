@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'lpadmin.menu' => \App\Http\Middleware\LPadmin\ShareMenuData::class,
         'format.time' => \App\Http\Middleware\FormatTimeResponse::class,
         'component.enabled' => \App\Http\Middleware\ComponentEnabled::class,
+        'set.locale' => \App\Http\Middleware\SetLocaleFromPath::class,
     ];
 }

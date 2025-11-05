@@ -26,11 +26,51 @@ class ConfigHelper
      *
      * @param string $name 配置名称
      * @param mixed $default 默认值
+     * @param string|null $lang 语言代码，如果提供则尝试获取多语言值
      * @return mixed
      */
-    public static function get(string $name, $default = null)
+    public static function get(string $name, $default = null, ?string $lang = null)
     {
-        return Option::getValue($name, $default);
+        $value = Option::getValue($name, $default);
+        
+        // 如果提供了语言代码，尝试获取多语言值
+        if ($lang !== null) {
+            return self::getI18n($name, $lang, $value);
+        }
+        
+        return $value;
+    }
+
+    /**
+     * 获取多语言配置值
+     *
+     * @param string $name 配置名称
+     * @param string $lang 语言代码
+     * @param mixed $default 默认值
+     * @return mixed
+     */
+    public static function getI18n(string $name, string $lang, $default = '')
+    {
+        $cacheKey = 'lpadmin_option_i18n_' . $name . '_' . $lang;
+
+        return Cache::remember($cacheKey, 3600, function () use ($name, $lang, $default) {
+            $option = Option::where('name', $name)->first();
+            
+            if (!$option) {
+                return $default;
+            }
+            
+            // 如果是多语言配置
+            if ($option->is_i18n && $option->value) {
+                $data = json_decode($option->value, true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
+                    return $data[$lang] ?? (array_values($data)[0] ?? $default);
+                }
+            }
+            
+            // 非多语言配置，直接返回值
+            return $option->value ?: $default;
+        });
     }
 
     /**
@@ -117,7 +157,7 @@ class ConfigHelper
         $option = Option::where('name', $name)->first();
         
         if ($option) {
-            Option::clearCache($name);
+            self::clearCache($name);
             return $option->delete();
         }
 
@@ -142,6 +182,21 @@ class ConfigHelper
             $groups = Option::distinct('group')->pluck('group');
             foreach ($groups as $group) {
                 Cache::forget('lpadmin_options_group_' . $group);
+            }
+            
+            // 清除所有多语言缓存
+            $langs = ['cn', 'en', 'tw', 'zh'];
+            $options = Option::pluck('name');
+            foreach ($options as $optionName) {
+                foreach ($langs as $lang) {
+                    Cache::forget('lpadmin_option_i18n_' . $optionName . '_' . $lang);
+                }
+            }
+        } else {
+            // 清除指定配置的多语言缓存
+            $langs = ['cn', 'en', 'tw', 'zh'];
+            foreach ($langs as $lang) {
+                Cache::forget('lpadmin_option_i18n_' . $name . '_' . $lang);
             }
         }
     }
@@ -384,9 +439,7 @@ class ConfigHelper
         $result = $option->update($data);
         
         if ($result) {
-            Option::clearCache($name);
-            // 清除统计缓存
-            Cache::forget(self::CACHE_PREFIX . 'statistics');
+            self::clearCache($name);
         }
         
         return $result;
@@ -395,13 +448,26 @@ class ConfigHelper
     /**
      * 获取网站基本信息
      *
+     * @param string|null $lang 语言代码，如果提供则获取多语言值
      * @return array
      */
-    public static function getSiteInfo(): array
+    public static function getSiteInfo(?string $lang = null): array
     {
+        if ($lang !== null) {
+            return [
+                'name' => self::getI18n('site_name', $lang, 'Blog'),
+                'logo' => self::getI18n('site_logo', $lang, '/static/admin/images/logo.png'),
+                'title' => self::getI18n('site_title', $lang, ''),
+                'copyright' => self::getI18n('system_copyright', $lang, '&copy; ' . date('Y')),
+                'keywords' => self::getI18n('site_keywords', $lang, ''),
+                'description' => self::getI18n('site_description', $lang, ''),
+            ];
+        }
+        
         return [
             'name' => self::get('site_name', 'LPadmin管理系统'),
             'logo' => self::get('site_logo', '/static/admin/images/logo.png'),
+            'title' => self::get('site_title', ''),
             'copyright' => self::get('site_copyright', 'Copyright © 2024 LPadmin'),
             'keywords' => self::get('site_keywords', ''),
             'description' => self::get('site_description', ''),

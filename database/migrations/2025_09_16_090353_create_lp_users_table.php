@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('username', 50)->unique()->comment('用户名');
             $table->string('password')->comment('密码');
+            $table->rememberToken()->comment('记住我令牌');
             $table->string('nickname', 50)->comment('昵称');
             $table->string('email', 100)->nullable()->unique()->comment('邮箱');
             $table->string('phone', 20)->nullable()->unique()->comment('手机号');

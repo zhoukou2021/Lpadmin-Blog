@@ -42,9 +42,6 @@ class SimplifiedPermissionSeeder extends Seeder
 
         // 创建系统配置
         $this->createOptions();
-
-        // 创建字典数据
-        $this->createDictionaries();
     }
 
     /**
@@ -58,14 +55,12 @@ class SimplifiedPermissionSeeder extends Seeder
             // 清理关联表
             DB::table('admin_roles')->truncate();
             DB::table('role_rules')->truncate();
-            DB::table('dictionary_items')->truncate();
 
             // 清理主表（注意：有外键约束的表需要特殊处理）
             DB::table('admins')->truncate();
             DB::table('roles')->truncate();
             DB::table('rules')->truncate();
             DB::table('options')->truncate();
-            DB::table('dictionaries')->truncate();
         } catch (\Exception) {
             // 如果TRUNCATE失败，使用DELETE方式
             $this->cleanupWithDelete();
@@ -83,25 +78,21 @@ class SimplifiedPermissionSeeder extends Seeder
         // 清理关联表
         DB::table('admin_roles')->delete();
         DB::table('role_rules')->delete();
-        DB::table('dictionary_items')->delete();
 
         // 清理主表
         DB::table('admins')->delete();
         DB::table('roles')->delete();
         DB::table('rules')->delete();
         DB::table('options')->delete();
-        DB::table('dictionaries')->delete();
 
         // 重置自增ID（可选）
         DB::statement('ALTER TABLE admin_roles AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE role_rules AUTO_INCREMENT = 1');
-        DB::statement('ALTER TABLE dictionary_items AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE admin_logs AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE admins AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE roles AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE rules AUTO_INCREMENT = 1');
         DB::statement('ALTER TABLE options AUTO_INCREMENT = 1');
-        DB::statement('ALTER TABLE dictionaries AUTO_INCREMENT = 1');
     }
 
     /**
@@ -218,25 +209,6 @@ class SimplifiedPermissionSeeder extends Seeder
                             ['name' => 'menu.batchDestroy', 'title' => '批量删除', 'type' => 'button', 'is_show' => 0],
                         ]
                     ],
-                    [
-                        'name' => 'component',
-                        'title' => '组件管理',
-                        'type' => 'menu',
-                        'icon' => 'layui-icon-component',
-                        'url' => $this->getRoutePrefix() . '/component',
-                        'is_show' => 1,
-                        'sort' => 550,
-                        'children' => [
-                            ['name' => 'component.index', 'title' => '组件列表', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'component.show', 'title' => '组件详情', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'component.install', 'title' => '安装组件', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'component.uninstall', 'title' => '卸载组件', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'component.refresh', 'title' => '刷新组件', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'component.statistics', 'title' => '组件统计', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'component.validate', 'title' => '验证组件', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'component.batch_action', 'title' => '批量操作', 'type' => 'button', 'is_show' => 0],
-                        ]
-                    ],
                 ]
             ],
 
@@ -264,37 +236,141 @@ class SimplifiedPermissionSeeder extends Seeder
                 ]
             ],
 
-            // ==================== 文件管理 ====================
+            // ==================== 博客管理 ====================
             [
-                'name' => 'upload',
-                'title' => '文件管理',
+                'name' => 'blog',
+                'title' => '博客管理',
                 'type' => 'menu',
-                'icon' => 'layui-icon-upload',
-                'url' => $this->getRoutePrefix() . '/upload',
+                'icon' => 'layui-icon-template-1',
+                'url' => '#',
                 'is_show' => 1,
                 'sort' => 800,
                 'children' => [
-                    ['name' => 'upload.index', 'title' => '文件列表', 'type' => 'menu', 'is_show' => 1,'url' => $this->getRoutePrefix() . '/upload',
-                    'children' => [
-                        ['name' => 'upload.create', 'title' => '上传页面', 'type' => 'button', 'is_show' => 0],
-                        ['name' => 'upload.store', 'title' => '上传文件', 'type' => 'api', 'is_show' => 0],
-                        ['name' => 'upload.file', 'title' => '上传普通文件', 'type' => 'api', 'is_show' => 0],
-                        ['name' => 'upload.image', 'title' => '上传图片', 'type' => 'api', 'is_show' => 0],
-                        ['name' => 'upload.avatar', 'title' => '上传头像', 'type' => 'api', 'is_show' => 0],
-                        ['name' => 'upload.show', 'title' => '查看文件', 'type' => 'button', 'is_show' => 0],
-                        ['name' => 'upload.destroy', 'title' => '删除文件', 'type' => 'button', 'is_show' => 0],
-                        ['name' => 'upload.batch_delete', 'title' => '批量删除', 'type' => 'button', 'is_show' => 0],
-                        ['name' => 'upload.download', 'title' => '下载文件', 'type' => 'api', 'is_show' => 0],
-                        ['name' => 'upload.preview', 'title' => '预览文件', 'type' => 'api', 'is_show' => 0],
-                        ['name' => 'upload.selector', 'title' => '文件选择器', 'type' => 'api', 'is_show' => 0],
-                        ['name' => 'upload.statistics', 'title' => '文件统计', 'type' => 'api', 'is_show' => 0],
-                    ]],
-                    ['name' => 'upload.config_page', 'title' => '配置管理', 'type' => 'menu', 'is_show' => 1,'url' => $this->getRoutePrefix() . '/upload/config-page',
-                    'children' => [
-                        ['name' => 'upload.config_update', 'title' => '更新上传配置', 'type' => 'api', 'is_show' => 0],
-                        ['name' => 'upload.config', 'title' => '上传配置', 'type' => 'api', 'is_show' => 0],
-                    ]],
-                    
+                    [
+                        'name' => 'blog.post',
+                        'title' => '博客列表',
+                        'type' => 'menu',
+                        'icon' => null,
+                        'url' => $this->getRoutePrefix() . '/blog/post',
+                        'is_show' => 1,
+                        'sort' => 800,
+                        'children' => [
+                            ['name' => 'blog.post.index', 'title' => '文章列表', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.post.create', 'title' => '创建文章', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.post.store', 'title' => '保存文章', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.post.edit', 'title' => '编辑文章', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.post.update', 'title' => '更新文章', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.post.destroy', 'title' => '删除文章', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.post.select', 'title' => '文章选择', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.post.batch_delete', 'title' => '批量删除', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.post.batch_status', 'title' => '批量更新状态', 'type' => 'button', 'is_show' => 0],
+                        ]
+                    ],
+                    [
+                        'name' => 'blog.category',
+                        'title' => '博客分类',
+                        'type' => 'menu',
+                        'icon' => null,
+                        'url' => $this->getRoutePrefix() . '/blog/category',
+                        'is_show' => 1,
+                        'sort' => 700,
+                        'children' => [
+                            ['name' => 'blog.category.index', 'title' => '分类列表', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.category.create', 'title' => '创建分类', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.category.store', 'title' => '保存分类', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.category.edit', 'title' => '编辑分类', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.category.update', 'title' => '更新分类', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.category.destroy', 'title' => '删除分类', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.category.select', 'title' => '分类选择', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.category.batch_delete', 'title' => '批量删除', 'type' => 'button', 'is_show' => 0],
+                        ]
+                    ],
+                    [
+                        'name' => 'blog.tag',
+                        'title' => '博客标签',
+                        'type' => 'menu',
+                        'icon' => null,
+                        'url' => $this->getRoutePrefix() . '/blog/tag',
+                        'is_show' => 1,
+                        'sort' => 600,
+                        'children' => [
+                            ['name' => 'blog.tag.index', 'title' => '标签列表', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.tag.create', 'title' => '创建标签', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.tag.store', 'title' => '保存标签', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.tag.edit', 'title' => '编辑标签', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.tag.update', 'title' => '更新标签', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.tag.destroy', 'title' => '删除标签', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.tag.select', 'title' => '标签选择', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.tag.batch_delete', 'title' => '批量删除', 'type' => 'button', 'is_show' => 0],
+                        ]
+                    ],
+                    [
+                        'name' => 'blog.comment',
+                        'title' => '博客评论',
+                        'type' => 'menu',
+                        'icon' => null,
+                        'url' => $this->getRoutePrefix() . '/blog/comment',
+                        'is_show' => 1,
+                        'sort' => 500,
+                        'children' => [
+                            ['name' => 'blog.comment.index', 'title' => '评论列表', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.comment.approve', 'title' => '审核评论', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.comment.block', 'title' => '屏蔽评论', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.comment.destroy', 'title' => '删除评论', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.comment.batch_delete', 'title' => '批量删除', 'type' => 'button', 'is_show' => 0],
+                        ]
+                    ],
+                    [
+                        'name' => 'blog.navs',
+                        'title' => '顶部菜单',
+                        'type' => 'menu',
+                        'icon' => null,
+                        'url' => $this->getRoutePrefix() . '/blog/nav',
+                        'is_show' => 1,
+                        'sort' => 400,
+                        'children' => [
+                            ['name' => 'blog.nav.index', 'title' => '菜单列表', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.nav.create', 'title' => '创建菜单', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.nav.store', 'title' => '保存菜单', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.nav.edit', 'title' => '编辑菜单', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.nav.update', 'title' => '更新菜单', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.nav.destroy', 'title' => '删除菜单', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.nav.batch_delete', 'title' => '批量删除', 'type' => 'button', 'is_show' => 0],
+                        ]
+                    ],
+                    [
+                        'name' => 'blog.ad',
+                        'title' => '广告管理',
+                        'type' => 'menu',
+                        'icon' => 'layui-icon-senior',
+                        'url' => $this->getRoutePrefix() . '/blog/ad',
+                        'is_show' => 1,
+                        'sort' => 300,
+                        'children' => [
+                            ['name' => 'blog.ad.index', 'title' => '广告列表', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.ad.create', 'title' => '创建广告', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.ad.store', 'title' => '保存广告', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.ad.edit', 'title' => '编辑广告', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.ad.update', 'title' => '更新广告', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'blog.ad.destroy', 'title' => '删除广告', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'blog.ad.batch_delete', 'title' => '批量删除', 'type' => 'button', 'is_show' => 0],
+                        ]
+                    ],
+                    [
+                        'name' => 'deepseek',
+                        'title' => '生成文章',
+                        'type' => 'menu',
+                        'icon' => null,
+                        'url' => $this->getRoutePrefix() . '/blog/deepseek/config',
+                        'is_show' => 1,
+                        'sort' => 200,
+                        'children' => [
+                            ['name' => 'deepseek.config', 'title' => '配置页面', 'type' => 'button', 'is_show' => 0],
+                            ['name' => 'deepseek.config.store', 'title' => '保存配置', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'deepseek.config.data', 'title' => '获取配置', 'type' => 'api', 'is_show' => 0],
+                            ['name' => 'deepseek.generate', 'title' => '生成文章', 'type' => 'button', 'is_show' => 0],
+                        ]
+                    ],
                 ]
             ],
 
@@ -337,45 +413,6 @@ class SimplifiedPermissionSeeder extends Seeder
                         ['name' => 'config.groups.batch_delete', 'title' => '批量删除分组', 'type' => 'api', 'is_show' => 0],
                         ['name' => 'config.groups.show', 'title' => '查看分组', 'type' => 'api', 'is_show' => 0],
                     ]],
-                    // ==================== 数据字典 ====================
-                    [
-                        'name' => 'dictionary',
-                        'title' => '数据字典',
-                        'type' => 'menu',
-                        'icon' => 'layui-icon-template-1',
-                        'url' => $this->getRoutePrefix() . '/dictionary',
-                        'is_show' => 1,
-                        'sort' => 700,
-                        'children' => [
-                            ['name' => 'dictionary.index', 'title' => '字典列表', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.create', 'title' => '创建字典', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.store', 'title' => '保存字典', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.show', 'title' => '查看字典', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.edit', 'title' => '编辑字典', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.update', 'title' => '更新字典', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.destroy', 'title' => '删除字典', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.select', 'title' => '字典选择', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.statistics', 'title' => '字典统计', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.data', 'title' => '字典数据', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.options', 'title' => '字典选项', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.clear_cache', 'title' => '清除缓存', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.usage', 'title' => '使用示例', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.toggle_status', 'title' => '切换状态', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.batch_destroy', 'title' => '批量删除', 'type' => 'button', 'is_show' => 0],
-                            // 字典项管理
-                            ['name' => 'dictionary.items.index', 'title' => '字典项列表', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.items.create', 'title' => '创建字典项', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.items.store', 'title' => '保存字典项', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.items.show', 'title' => '查看字典项', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.items.edit', 'title' => '编辑字典项', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.items.update', 'title' => '更新字典项', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.items.destroy', 'title' => '删除字典项', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.items.select', 'title' => '字典项选择', 'type' => 'api', 'is_show' => 0],
-                            ['name' => 'dictionary.items.toggle_status', 'title' => '切换字典项状态', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.items.batch_destroy', 'title' => '批量删除字典项', 'type' => 'button', 'is_show' => 0],
-                            ['name' => 'dictionary.items.batch_sort', 'title' => '批量排序', 'type' => 'api', 'is_show' => 0],
-                        ]
-                    ],
                 ]
             ],
 
@@ -500,8 +537,6 @@ class SimplifiedPermissionSeeder extends Seeder
                     'dashboard',
                     'user', 'user.create', 'user.update', 'user.toggle_status', 'user.statistics',
                     'config', 'config.select',
-                    'dictionary',
-                    'upload',
                 ])->pluck('id')->toArray();
                 $role->rules()->sync($operatorRuleIds);
             }
@@ -591,30 +626,12 @@ class SimplifiedPermissionSeeder extends Seeder
             // ==================== 系统配置 ====================
             [
                 'group' => 'system',
-                'name' => 'system_name',
-                'title' => '系统名称',
-                'value' => 'LPadmin管理系统',
-                'type' => 'text',
-                'description' => '系统名称',
-                'sort' => 100
-            ],
-            [
-                'group' => 'system',
-                'name' => 'system_version',
-                'title' => '系统版本',
-                'value' => '1.0.1',
-                'type' => 'text',
-                'description' => '系统版本',
-                'sort' => 90
-            ],
-            [
-                'group' => 'system',
                 'name' => 'system_author',
                 'title' => '系统作者',
                 'value' => 'LPadmin Team',
                 'type' => 'text',
                 'description' => '系统作者',
-                'sort' => 80
+                'sort' => 6
             ],
             [
                 'group' => 'system',
@@ -623,67 +640,109 @@ class SimplifiedPermissionSeeder extends Seeder
                 'value' => '© 2024 LPadmin. All rights reserved.',
                 'type' => 'text',
                 'description' => '版权信息',
-                'sort' => 70
+                'sort' => 7
             ],
-
-            // ==================== 文件上传配置 ====================
             [
-                'group' => 'upload',
-                'name' => 'upload_disk',
-                'title' => '存储方式',
-                'value' => 'public',
-                'type' => 'select',
+                'group' => 'system',
+                'name' => 'lang',
+                'title' => '多语言',
+                'value' => 'cn,en,tw',
+                'type' => 'checkbox',
                 'options' => json_encode([
-                    'public' => '本地公共存储',
-                    'local' => '本地私有存储'
+                    'cn' => '简体',
+                    'en' => '英文',
+                    'tw' => '繁体',
                 ]),
-                'description' => '文件存储方式选择',
-                'sort' => 100
+                'description' => '多语言',
+                'sort' => 8
             ],
             [
-                'group' => 'upload',
-                'name' => 'upload_path',
-                'title' => '存储路径',
-                'value' => 'lpadmin/uploads',
-                'type' => 'text',
-                'description' => '相对于存储磁盘的路径',
-                'sort' => 90
+                'group' => 'system',
+                'name' => 'site_name',
+                'title' => '网站名称',
+                'value' => json_encode(['cn' => 'LPadmin博客', 'en' => 'LPadmin Blog', 'tw' => 'LPadmin博客']),
+                'type' => Option::TYPE_TEXT,
+                'options' => null,
+                'description' => '网站名称',
+                'sort' => 1,
+                'is_i18n' => true
             ],
             [
-                'group' => 'upload',
-                'name' => 'upload_max_size',
-                'title' => '最大文件大小',
-                'value' => '10240',
-                'type' => 'number',
-                'description' => '单位：KB，范围：1KB - 100MB',
-                'sort' => 80
+                'group' => 'system',
+                'name' => 'site_title',
+                'title' => 'SEO标题',
+                'value' => json_encode(['cn' => 'PHP Laravel ThinkPHP Bootstrap jQuery HTML5 CSS3 开发经验与源码分享', 'en' => 'PHP, Laravel, ThinkPHP, Bootstrap, jQuery, HTML5, CSS3 Development Experience & Source Code Sharing', 'tw' => 'PHP Laravel ThinkPHP Bootstrap jQuery HTML5 CSS3 開發經驗與源碼分享']),
+                'type' => Option::TYPE_TEXT,
+                'options' => null,
+                'description' => '网站SEO标题',
+                'sort' => 2,
+                'is_i18n' => true
             ],
             [
-                'group' => 'upload',
-                'name' => 'upload_allowed_extensions',
-                'title' => '允许的文件类型',
-                'value' => json_encode(['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'xls', 'xlsx', 'zip', 'rar']),
-                'type' => 'textarea',
-                'description' => '允许上传的文件扩展名，JSON格式',
-                'sort' => 70
+                'group' => 'system',
+                'name' => 'site_keywords',
+                'title' => 'SEO关键词',
+                'value' => json_encode(['cn' => 'PHP,Laravel,ThinkPHP,Bootstrap,jQuery,HTML5,CSS3,开发经验,源码分享', 'en' => 'PHP,Laravel,ThinkPHP,Bootstrap,jQuery,HTML5,CSS3,Development Experience,Source Code Sharing', 'tw' => 'PHP,Laravel,ThinkPHP,Bootstrap,jQuery,HTML5,CSS3,開發經驗,源碼分享']),
+                'type' => Option::TYPE_TEXTAREA,
+                'options' => null,
+                'description' => '网站SEO关键词',
+                'sort' => 3,
+                'is_i18n' => true
             ],
             [
-                'group' => 'upload',
-                'name' => 'enable_security_check',
-                'title' => '启用安全检查',
-                'value' => '1',
-                'type' => 'switch',
-                'description' => '检查文件内容是否安全',
-                'sort' => 60
+                'group' => 'system',
+                'name' => 'site_description',
+                'title' => 'SEO描述',
+                'value' => json_encode(['cn' => 'LPadmin博客是一个专注于PHP、Laravel、ThinkPHP等技术栈的开发经验分享与源码下载平台', 'en' => 'LPadmin Blog is a platform for sharing PHP, Laravel, ThinkPHP development experience and source code downloads', 'tw' => 'LPadmin博客是一個專注於PHP、Laravel、ThinkPHP等技術棧的開發經驗分享與源碼下載平台']),
+                'type' => Option::TYPE_TEXTAREA,
+                'options' => null,
+                'description' => '网站SEO描述',
+                'sort' => 4,
+                'is_i18n' => true
             ],
             [
-                'group' => 'upload',
-                'name' => 'enable_duplicate_check',
-                'title' => '启用重复检查',
-                'value' => '1',
-                'type' => 'switch',
-                'description' => '检查是否上传重复文件',
-                'sort' => 50
+                'group' => 'system',
+                'name' => 'site_logo',
+                'title' => '网站logo',
+                'value' => '',
+                'type' => Option::TYPE_IMAGE,
+                'options' => null,
+                'description' => null,
+                'sort' => 5,
+                'is_i18n' => false
+            ],
+            [
+                'group' => 'contact',
+                'name' => 'contact_info',
+                'title' => '联系信息',
+                'value' => json_encode(['cn' => '<p>欢迎联系我们！</p><p>邮箱：admin@example.com</p><p>电话：400-000-0000</p>', 'en' => '<p>Welcome to contact us!</p><p>Email: admin@example.com</p><p>Phone: 400-000-0000</p>', 'tw' => '<p>歡迎聯繫我們！</p><p>郵箱：admin@example.com</p><p>電話：400-000-0000</p>']),
+                'type' => Option::TYPE_RICHTEXT,
+                'options' => null,
+                'description' => '配置联系信息',
+                'sort' => 1,
+                'is_i18n' => true
+            ],
+            [
+                'group' => 'system',
+                'name' => 'sensitive_word',
+                'title' => '敏感词',
+                'value' => '共产党|法轮功|习近平',
+                'type' => Option::TYPE_TEXTAREA,
+                'options' => null,
+                'description' => '评论内容敏感词过滤，多个敏感词使用 | 隔开',
+                'sort' => 9,
+                'is_i18n' => false
+            ],
+            [
+                'group' => 'system',
+                'name' => 'comment_check',
+                'title' => '评论审核',
+                'value' => '0',
+                'type' => Option::TYPE_SWITCH,
+                'options' => null,
+                'description' => '是否开启评论审核后才显示',
+                'sort' => 10,
+                'is_i18n' => false
             ],
 
             // ==================== 缓存配置 ====================
@@ -748,72 +807,107 @@ class SimplifiedPermissionSeeder extends Seeder
                 'description' => '自动清理缓存的间隔时间，单位：秒',
                 'sort' => 50
             ],
+
+            // ==================== DeepSeek AI 配置 ====================
+            [
+                'group' => 'deepseek',
+                'name' => 'deepseek_api_key',
+                'title' => 'DeepSeek API Key',
+                'value' => '',
+                'type' => Option::TYPE_TEXT,
+                'options' => null,
+                'description' => 'DeepSeek API 密钥，用于调用 AI 生成接口',
+                'sort' => 100
+            ],
+            [
+                'group' => 'deepseek',
+                'name' => 'deepseek_auto_enabled',
+                'title' => '开启自动生成',
+                'value' => '1',
+                'type' => Option::TYPE_SWITCH,
+                'options' => null,
+                'description' => '是否开启每天自动生成文章',
+                'sort' => 99
+            ],
+            [
+                'group' => 'deepseek',
+                'name' => 'deepseek_auto_publish',
+                'title' => '自动发布',
+                'value' => '0',
+                'type' => Option::TYPE_SWITCH,
+                'options' => null,
+                'description' => '生成的文章是否自动发布（否则保存为草稿）',
+                'sort' => 98
+            ],
+            [
+                'group' => 'deepseek',
+                'name' => 'deepseek_daily_count_min',
+                'title' => '每天最少生成条数',
+                'value' => '1',
+                'type' => Option::TYPE_NUMBER,
+                'options' => null,
+                'description' => '每天自动生成文章的最少数量',
+                'sort' => 97
+            ],
+            [
+                'group' => 'deepseek',
+                'name' => 'deepseek_daily_count_max',
+                'title' => '每天最多生成条数',
+                'value' => '3',
+                'type' => Option::TYPE_NUMBER,
+                'options' => null,
+                'description' => '每天自动生成文章的最多数量',
+                'sort' => 96
+            ],
+            [
+                'group' => 'deepseek',
+                'name' => 'deepseek_keywords',
+                'title' => '关键词列表',
+                'value' => "php\r\nlaravel\r\nthinkphp\r\nredis\r\nmysql\r\ndcat\r\nfastadmin\r\ncrmeb\r\nhtml5\r\ncss3\r\njquery\r\njs\r\nuniapp\r\n小程序\r\n代码\r\n源码\r\n模板\r\nblade\r\nworkerman\r\nwebman\r\nlayui\r\nlaravel-admin\r\ngo",
+                'type' => Option::TYPE_TEXTAREA,
+                'options' => null,
+                'description' => '用于生成文章的关键词，每行一个',
+                'sort' => 95
+            ],
+            [
+                'group' => 'deepseek',
+                'name' => 'deepseek_prompt_rules',
+                'title' => '生成规则/提示词',
+                'value' => $this->getDefaultPromptRulesForSeeder(),
+                'type' => Option::TYPE_TEXTAREA,
+                'options' => null,
+                'description' => '文章生成的提示词模板，用于指导 AI 生成内容',
+                'sort' => 94
+            ],
+            [
+                'group' => 'deepseek',
+                'name' => 'deepseek_model',
+                'title' => 'AI 模型',
+                'value' => 'deepseek-chat',
+                'type' => Option::TYPE_TEXT,
+                'options' => null,
+                'description' => '使用的 DeepSeek 模型名称',
+                'sort' => 93
+            ],
         ];
 
         foreach ($options as $option) {
-            Option::create($option);
+            // 检查配置是否已存在，避免重复插入
+            $exists = Option::where('group', $option['group'])
+                ->where('name', $option['name'])
+                ->exists();
+            
+            if (!$exists) {
+                Option::create($option);
+            }
         }
     }
 
     /**
-     * 创建字典数据
+     * 获取默认提示词规则（用于Seeder，匹配数据库中的实际格式）
      */
-    private function createDictionaries(): void
+    private function getDefaultPromptRulesForSeeder(): string
     {
-        $dictionaries = [
-            [
-                'name' => 'user_status',
-                'title' => '用户状态',
-                'description' => '用户账户状态字典',
-                'status' => 1,
-                'sort' => 100,
-                'items' => [
-                    ['label' => '正常', 'value' => '1', 'sort' => 1, 'status' => 1],
-                    ['label' => '禁用', 'value' => '0', 'sort' => 2, 'status' => 1],
-                ]
-            ],
-            [
-                'name' => 'admin_status',
-                'title' => '管理员状态',
-                'description' => '管理员账户状态字典',
-                'status' => 1,
-                'sort' => 90,
-                'items' => [
-                    ['label' => '正常', 'value' => '1', 'sort' => 1, 'status' => 1],
-                    ['label' => '禁用', 'value' => '0', 'sort' => 2, 'status' => 1],
-                ]
-            ],
-            [
-                'name' => 'gender',
-                'title' => '性别',
-                'description' => '性别字典',
-                'status' => 1,
-                'sort' => 80,
-                'items' => [
-                    ['label' => '男', 'value' => '1', 'sort' => 1, 'status' => 1],
-                    ['label' => '女', 'value' => '0', 'sort' => 2, 'status' => 1],
-                    ['label' => '保密', 'value' => '2', 'sort' => 3, 'status' => 1],
-                ]
-            ],
-        ];
-
-        foreach ($dictionaries as $dictData) {
-            $items = $dictData['items'] ?? [];
-            unset($dictData['items']);
-
-            $dictData['created_at'] = now();
-            $dictData['updated_at'] = now();
-
-            $dictId = DB::table('dictionaries')->insertGetId($dictData);
-
-            if (!empty($items)) {
-                foreach ($items as $item) {
-                    $item['dictionary_id'] = $dictId;
-                    $item['created_at'] = now();
-                    $item['updated_at'] = now();
-                    DB::table('dictionary_items')->insert($item);
-                }
-            }
-        }
+        return "你是一位专业的博客文章写作专家。请根据以下信息生成一篇高质量的博客文章：\r\n\r\n分类：{category_name}\r\n关键词：{keyword}\r\n标签：{tags}\r\n\r\n要求：\r\n1. 文章标题要有吸引力，符合SEO优化，标题中要包含具体的问题\r\n2. 摘要控制在150-200字，概括文章核心内容\r\n3. 正文内容不少于800字，结构清晰，段落分明，内容要围绕标题中的具体问题回答\r\n4. SEO标题要与文章标题相关但可以略有不同\r\n5. SEO关键词包含：{keyword} 及相关标签\r\n6. SEO描述要在150字以内，突出文章价值\r\n7. 内容要原创、专业、有实用价值\r\n\r\n生成格式要求（非常重要）：\r\n- 必须使用严格符合JSON规范的格式返回，不要包含任何其他文字说明\r\n- JSON包含字段：title, summary, content, meta_title, meta_keywords, meta_description\r\n- 所有字段都是字符串类型\r\n- 字符串中的所有换行符、制表符等特殊字符必须使用转义序列（\\\\n, \\\\t, \\\\r），不能使用实际的换行符\r\n- 确保返回的是完整且有效的JSON，可以直接被json_decode解析\r\n\r\n请开始生成文章，只返回JSON格式数据，不要有任何其他文字：";
     }
 }

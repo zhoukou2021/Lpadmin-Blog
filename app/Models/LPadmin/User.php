@@ -3,7 +3,8 @@
 namespace App\Models\LPadmin;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\TimeFormattable;
 
@@ -26,9 +27,9 @@ use App\Traits\TimeFormattable;
  * @property string $updated_at 更新时间
  * @property string $deleted_at 删除时间
  */
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory, SoftDeletes, TimeFormattable;
+    use HasFactory, Notifiable, SoftDeletes, TimeFormattable;
 
     /**
      * 数据表名称
@@ -59,6 +60,7 @@ class User extends Model
         'remark',
         'last_login_at',
         'last_login_ip',
+        'remember_token',
     ];
 
     /**
@@ -66,6 +68,7 @@ class User extends Model
      */
     protected $hidden = [
         'password',
+        'remember_token',
     ];
 
     /**
@@ -77,7 +80,16 @@ class User extends Model
         'birthday' => 'date',
         'last_login_at' => 'datetime',
         'password' => 'hashed',
+        'email_verified_at' => 'datetime',
     ];
+    
+    /**
+     * 获取记住我 token 的存储名称
+     */
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
+    }
 
     /**
      * 性别常量
