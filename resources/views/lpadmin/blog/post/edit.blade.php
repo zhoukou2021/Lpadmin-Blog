@@ -105,13 +105,13 @@
                         </div>
                         <fieldset class="layui-elem-field layui-field-title"><legend>SEO</legend></fieldset>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">Meta Title</label>
+                            <label class="layui-form-label">关键词</label>
                             <div class="layui-input-block">
                                 <input type="text" name="meta_title[{{ $l }}]" class="layui-input" value="{{ $post->meta_title[$l] ?? '' }}">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">Meta Desc</label>
+                            <label class="layui-form-label">描述</label>
                             <div class="layui-input-block">
                                 <textarea name="meta_desc[{{ $l }}]" class="layui-textarea">{{ $post->meta_desc[$l] ?? '' }}</textarea>
                             </div>

@@ -23,7 +23,7 @@ class ContactController extends Controller
         $banners = get_blog_ad(Ad::TYPE_TOP_BANNER, $lang, false, 8);
 
         // 获取联系方式信息（支持多语言）
-        $contactContent = \App\Helpers\ConfigHelper::getI18n('contact_us', $lang, '');
+        $contactContent = \App\Helpers\ConfigHelper::getI18n('contact_info', $lang, '');
 
         // 友情链接
         $friendLinks = get_blog_friend_links($lang, 50);

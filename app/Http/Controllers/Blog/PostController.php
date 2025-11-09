@@ -299,7 +299,7 @@ class PostController extends Controller
         $canonicalUrl = url("/{$finalSlug}");
         $seo = [
             'title' => $postTitle . ' - ' . __('blog.blog'). ' - ' .\App\Helpers\ConfigHelper::getI18n('site_name', $lang, ''),
-            'keywords' => \App\Helpers\ConfigHelper::getI18n('site_keywords', $lang, ''),
+            'keywords' => \App\Helpers\ConfigHelper::getI18n('meta_title', $lang, ''),
             'description' => $postSummary ?? \App\Helpers\ConfigHelper::getI18n('site_description', $lang, ''),
             'canonical' => $canonicalUrl,
         ];

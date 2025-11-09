@@ -91,6 +91,8 @@ Route::group($groupConfig, function () {
             Route::get('statistics', [DashboardController::class, 'statistics'])->name('statistics'); // 获取仪表盘统计数据
             Route::get('system-info', [DashboardController::class, 'systemInfo'])->name('system_info'); // 获取系统信息
             Route::get('recent-logins', [DashboardController::class, 'recentLogins'])->name('recent_logins'); // 获取最近登录记录
+            Route::get('trend-data', [DashboardController::class, 'trendData'])->name('trend_data'); // 获取趋势数据
+            Route::get('top-pages', [DashboardController::class, 'topPages'])->name('top_pages'); // 获取访问量前十页面
         });
 
         /*

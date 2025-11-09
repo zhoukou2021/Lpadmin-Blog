@@ -88,7 +88,7 @@ class DeepSeekController extends BaseController
         try {
             // 使用验证后的数据
             $validated = $validator->validated();
-            
+
             foreach ($validated as $name => $value) {
                 if ($value !== null) {
                     // 处理布尔值

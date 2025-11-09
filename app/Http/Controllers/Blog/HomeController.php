@@ -151,6 +151,79 @@ class HomeController extends Controller
             'categories','tags','hotComments','hotViews','hotFavorites','langData','friendLinks','siteName','copyright','seo'
         ));
     }
+
+    /**
+     * 首页分页加载更多文章
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loadMore(Request $request)
+    {
+        $type = $request->get('type', 'new'); // new, hot, rec
+        $page = (int)$request->get('page', 1);
+        $lang = $request->attributes->get('current_lang') ?? 'cn';
+
+        // 处理文章数据的辅助函数
+        $processPost = function($post) use ($lang) {
+            $title = get_i18n_value($post->title, $lang, '');
+            $slug = $post->slug ?? ('article_'.$post->id);
+            $summary = get_i18n_value($post->summary, $lang, '');
+            $categoryName = $post->category ? get_i18n_value($post->category->name, $lang, '') : '';
+            $categorySlug = $post->category ? ($post->category->slug ?? ('category_'.$post->category->id)) : '';
+            $tags = $post->tags->map(function($tag) use ($lang) {
+                return [
+                    'name' => get_i18n_value($tag->name, $lang, ''),
+                    'slug' => $tag->slug ?? ('tags_'.$tag->id),
+                ];
+            });
+            return [
+                'id' => $post->id,
+                'title' => $title,
+                'slug' => $slug,
+                'summary' => $summary,
+                'cover' => $post->cover ?? '',
+                'published_at' => $post->published_at,
+                'category_name' => $categoryName,
+                'category_slug' => $categorySlug,
+                'tags' => $tags,
+                'view_count' => $post->view_count ?? 0,
+                'comments_count' => $post->comments_count ?? 0,
+                'likes_count' => $post->likes_count ?? 0,
+                'favorites_count' => $post->favorites_count ?? 0,
+            ];
+        };
+
+        $query = Post::where('status', 'published')
+            ->with(['category', 'tags'])
+            ->withCount(['comments', 'likes', 'favorites']);
+
+        // 根据类型设置查询条件
+        switch ($type) {
+            case 'rec':
+                $query->where('recommend', 1)
+                    ->orderByDesc('published_at');
+                break;
+            case 'hot':
+                $query->orderByDesc('likes_count')
+                    ->orderByDesc('published_at');
+                break;
+            case 'new':
+            default:
+                $query->orderByDesc('published_at');
+                break;
+        }
+
+        $postsRaw = $query->paginate(10, ['*'], 'page', $page);
+        $posts = $postsRaw->map($processPost);
+
+        return response()->json([
+            'code' => 0,
+            'data' => $posts,
+            'has_more' => $postsRaw->hasMorePages(),
+            'current_page' => $postsRaw->currentPage(),
+            'last_page' => $postsRaw->lastPage(),
+        ]);
+    }
 }
 
 

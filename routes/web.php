@@ -23,6 +23,7 @@ require __DIR__.'/lpadmin.php';
 // 博客路由：统一无语言前缀，通过cookie/session保存语言设置
 Route::group(['middleware' => ['set.locale']], function () {
     Route::get('/', [\App\Http\Controllers\Blog\HomeController::class, 'index'])->name('site.home');
+    Route::get('/home/load-more', [\App\Http\Controllers\Blog\HomeController::class, 'loadMore'])->name('site.home.loadMore');
     Route::get('/contact', [\App\Http\Controllers\Blog\ContactController::class, 'show'])->name('site.contact.show');
     Route::get('/sitemap', [\App\Http\Controllers\Blog\SitemapController::class, 'index'])->name('site.sitemap');
     

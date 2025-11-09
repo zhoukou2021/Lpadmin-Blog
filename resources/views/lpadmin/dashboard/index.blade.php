@@ -70,70 +70,6 @@
 .info-label { color: #666; }
 .info-value { color: #333; font-weight: 500; }
 
-.module-card {
-    background: #fff;
-    border: 1px solid #e6e6e6;
-    border-radius: 4px;
-    padding: 8px 12px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    margin-bottom: 6px;
-}
-.module-card:hover {
-    border-color: #1E9FFF;
-    background: #f8f9ff;
-}
-.module-card .module-icon {
-    font-size: 16px;
-    color: var(--theme-color, #1E9FFF);
-    margin-right: 8px;
-    vertical-align: middle;
-}
-.module-card .module-title {
-    font-size: 12px;
-    font-weight: bold;
-    color: #333;
-    vertical-align: middle;
-}
-.module-card .module-desc {
-    font-size: 11px;
-    color: #999;
-    margin-top: 3px;
-    margin-left: 24px;
-}
-
-.doc-card {
-    background: #fff;
-    border: 1px solid #e6e6e6;
-    border-radius: 4px;
-    padding: 8px 12px;
-    margin-bottom: 6px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-.doc-card:hover {
-    border-color: #1E9FFF;
-    background: #f8f9ff;
-}
-.doc-card .doc-icon {
-    font-size: 16px;
-    color: var(--theme-color, #1E9FFF);
-    margin-right: 8px;
-    vertical-align: middle;
-}
-.doc-card .doc-title {
-    font-size: 12px;
-    font-weight: bold;
-    color: #333;
-    vertical-align: middle;
-}
-.doc-card .doc-desc {
-    font-size: 11px;
-    color: #999;
-    margin-top: 3px;
-    margin-left: 24px;
-}
-
 .chart-container {
     background: #fff;
     border: 1px solid #e6e6e6;
@@ -153,136 +89,337 @@
     margin-right: 5px;
 }
 
-.welcome-banner {
-    background: var(--theme-color, #1E9FFF);
-    color: white;
+.top-pages-card {
+    background: #fff;
+    border: 1px solid #e6e6e6;
     border-radius: 6px;
-    padding: 20px;
-    margin-bottom: 15px;
-    text-align: center;
+    margin-bottom: 10px;
 }
-.welcome-banner h1 {
-    font-size: 22px;
-    margin-bottom: 8px;
+.top-pages-card .layui-card-header {
+    background: #f8f9fa;
+    color: #333;
+    border-radius: 6px 6px 0 0;
     font-weight: bold;
-}
-.welcome-banner h1 i {
-    margin-right: 8px;
-}
-.welcome-banner p {
     font-size: 14px;
-    opacity: 0.9;
-    margin-bottom: 0;
+    padding: 10px 15px;
+}
+.top-pages-card .layui-card-header i {
+    color: var(--theme-color, #1E9FFF);
+    margin-right: 5px;
+}
+.top-pages-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.top-pages-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.3s ease;
+}
+.top-pages-item:last-child {
+    border-bottom: none;
+}
+.top-pages-item:hover {
+    background-color: #f8f9fa;
+}
+.top-pages-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    color: #666;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+.top-pages-item:nth-child(1) .top-pages-rank {
+    background: #FFD700;
+    color: #fff;
+}
+.top-pages-item:nth-child(2) .top-pages-rank {
+    background: #C0C0C0;
+    color: #fff;
+}
+.top-pages-item:nth-child(3) .top-pages-rank {
+    background: #CD7F32;
+    color: #fff;
+}
+.top-pages-content {
+    flex: 1;
+    min-width: 0;
+}
+.top-pages-title {
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.top-pages-title a {
+    color: #333;
+    text-decoration: none;
+}
+.top-pages-title a:hover {
+    color: var(--theme-color, #1E9FFF);
+}
+.top-pages-meta {
+    font-size: 11px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.top-pages-views {
+    color: var(--theme-color, #1E9FFF);
+    font-weight: 500;
+}
+
+/* 移动端响应式样式 */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 10px;
+    }
+    
+    /* 统计卡片移动端优化 */
+    .stat-card {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+    .stat-card .stat-icon {
+        font-size: 24px;
+        margin-top: -3px;
+    }
+    .stat-card .stat-number {
+        font-size: 20px;
+        margin-bottom: 2px;
+    }
+    .stat-card .stat-label {
+        font-size: 11px;
+    }
+    
+    /* 图表容器移动端优化 */
+    .chart-container {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    .chart-container .chart-title {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+    #trend-chart {
+        height: 250px !important;
+    }
+    
+    /* 访问量前十卡片移动端优化 */
+    .top-pages-card {
+        margin-bottom: 10px;
+    }
+    .top-pages-card .layui-card-header {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+    .top-pages-item {
+        padding: 8px 12px;
+    }
+    .top-pages-rank {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+        margin-right: 8px;
+    }
+    .top-pages-title {
+        font-size: 12px;
+        margin-bottom: 3px;
+    }
+    .top-pages-meta {
+        font-size: 10px;
+        gap: 8px;
+    }
+    
+    /* 系统信息卡片移动端优化 */
+    .system-info-card .layui-card-header {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+    .system-info-card .layui-card-body {
+        padding: 8px 12px !important;
+    }
+    .info-item {
+        padding: 5px 0;
+        font-size: 11px;
+    }
+}
+
+/* 超小屏幕优化（小于480px） */
+@media (max-width: 480px) {
+    .dashboard-container {
+        padding: 8px;
+    }
+    
+    /* 统计卡片超小屏幕优化 */
+    .stat-card {
+        padding: 10px;
+        margin-bottom: 6px;
+    }
+    .stat-card .stat-icon {
+        font-size: 20px;
+    }
+    .stat-card .stat-number {
+        font-size: 18px;
+    }
+    .stat-card .stat-label {
+        font-size: 10px;
+    }
+    
+    /* 图表超小屏幕优化 */
+    .chart-container {
+        padding: 8px;
+    }
+    .chart-container .chart-title {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+    #trend-chart {
+        height: 200px !important;
+    }
+    
+    /* 访问量前十超小屏幕优化 */
+    .top-pages-card .layui-card-header {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+    .top-pages-item {
+        padding: 6px 10px;
+    }
+    .top-pages-rank {
+        width: 18px;
+        height: 18px;
+        font-size: 10px;
+        margin-right: 6px;
+    }
+    .top-pages-title {
+        font-size: 11px;
+    }
+    .top-pages-meta {
+        font-size: 9px;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    
+    /* 系统信息卡片超小屏幕优化 */
+    .system-info-card .layui-card-header {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+    .system-info-card .layui-card-body {
+        padding: 6px 10px !important;
+    }
+    .info-item {
+        padding: 4px 0;
+        font-size: 10px;
+        flex-wrap: wrap;
+    }
+    .info-label, .info-value {
+        font-size: 10px;
+    }
 }
 </style>
 <div class="pear-container dashboard-container">
-    <!-- 欢迎横幅 -->
-    <div class="welcome-banner">
-        <h1><i class="layui-icon layui-icon-home"></i> 欢迎使用 LPadmin 1.0.1</h1>
-        <p>基于Laravel 10+和PearAdminLayui构建的现代化后台管理系统 - 让管理更简单，让开发更高效</p>
-    </div>
-
-    <!-- 系统统计卡片 -->
+    <!-- 数据统计卡片 -->
     <div class="layui-row layui-col-space10">
-        <div class="layui-col-xs6 layui-col-md3">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="layui-icon layui-icon-user"></i>
-                </div>
-                <div class="stat-number" id="admin-count">{{ $statistics['system']['admin_count'] ?? 0 }}</div>
-                <div class="stat-label">管理员数量</div>
-            </div>
-        </div>
-        <div class="layui-col-xs6 layui-col-md3">
+        <div class="layui-col-xs6 layui-col-md2">
             <div class="stat-card">
                 <div class="stat-icon">
                     <i class="layui-icon layui-icon-group"></i>
                 </div>
-                <div class="stat-number" id="user-count">{{ $statistics['system']['user_count'] ?? 0 }}</div>
-                <div class="stat-label">用户数量</div>
+                <div class="stat-number" id="user-count">{{ $statistics['blog']['user_count'] ?? 0 }}</div>
+                <div class="stat-label">用户数</div>
             </div>
         </div>
-        <div class="layui-col-xs6 layui-col-md3">
+        <div class="layui-col-xs6 layui-col-md2">
             <div class="stat-card">
                 <div class="stat-icon">
-                    <i class="layui-icon layui-icon-set"></i>
+                    <i class="layui-icon layui-icon-file"></i>
                 </div>
-                <div class="stat-number" id="role-count">{{ $statistics['system']['role_count'] ?? 0 }}</div>
-                <div class="stat-label">角色数量</div>
+                <div class="stat-number" id="post-count">{{ $statistics['blog']['post_count'] ?? 0 }}</div>
+                <div class="stat-label">博客数</div>
             </div>
         </div>
-        <div class="layui-col-xs6 layui-col-md3">
+        <div class="layui-col-xs6 layui-col-md2">
             <div class="stat-card">
                 <div class="stat-icon">
-                    <i class="layui-icon layui-icon-list"></i>
+                    <i class="layui-icon layui-icon-praise"></i>
                 </div>
-                <div class="stat-number" id="rule-count">{{ $statistics['system']['rule_count'] ?? 0 }}</div>
-                <div class="stat-label">权限数量</div>
+                <div class="stat-number" id="like-count">{{ $statistics['blog']['like_count'] ?? 0 }}</div>
+                <div class="stat-label">点赞数</div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md2">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="layui-icon layui-icon-dialogue"></i>
+                </div>
+                <div class="stat-number" id="comment-count">{{ $statistics['blog']['comment_count'] ?? 0 }}</div>
+                <div class="stat-label">评论数</div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md2">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="layui-icon layui-icon-star"></i>
+                </div>
+                <div class="stat-number" id="favorite-count">{{ $statistics['blog']['favorite_count'] ?? 0 }}</div>
+                <div class="stat-label">收藏数</div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md2">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="layui-icon layui-icon-eye"></i>
+                </div>
+                <div class="stat-number" id="total-views">{{ number_format($statistics['blog']['total_views'] ?? 0) }}</div>
+                <div class="stat-label">总访问量</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 趋势图表和访问量前十 -->
+    <div class="layui-row layui-col-space10">
+        <div class="layui-col-xs12 layui-col-md8">
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="layui-icon layui-icon-chart"></i> 数据趋势图
+                </div>
+                <div id="trend-chart" style="height: 350px;"></div>
+            </div>
+        </div>
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="top-pages-card layui-card">
+                <div class="layui-card-header">
+                    <i class="layui-icon layui-icon-fire"></i> 访问量前十
+                </div>
+                <div class="layui-card-body" style="padding: 0;height: 350px;overflow-y: auto;">
+                    <ul class="top-pages-list" id="top-pages-list">
+                        <li class="top-pages-item" style="text-align: center; padding: 20px; color: #999;">
+                            <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop"></i> 加载中...
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- 系统信息和开发环境 -->
     <div class="layui-row layui-col-space10">
-        <div class="layui-col-md4">
-            <div class="system-info-card layui-card">
-                <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-engine"></i> 系统信息
-                </div>
-                <div class="layui-card-body" style="padding: 10px 15px;">
-                    <div class="info-item">
-                        <span class="info-label">系统名称</span>
-                        <span class="info-value">LPadmin</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Laravel版本</span>
-                        <span class="info-value">{{ app()->version() }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">PHP版本</span>
-                        <span class="info-value">{{ PHP_VERSION }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">操作系统</span>
-                        <span class="info-value">{{ PHP_OS }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">运行环境</span>
-                        <span class="info-value">{{ app()->environment() }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-md4">
-            <div class="system-info-card layui-card">
-                <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-component"></i> 开发环境
-                </div>
-                <div class="layui-card-body" style="padding: 10px 15px;">
-                    <div class="info-item">
-                        <span class="info-label">数据库</span>
-                        <span class="info-value">MySQL</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">缓存驱动</span>
-                        <span class="info-value">{{ config('cache.default') }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">队列驱动</span>
-                        <span class="info-value">{{ config('queue.default') }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">会话驱动</span>
-                        <span class="info-value">{{ config('session.driver') }}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">调试模式</span>
-                        <span class="info-value">{{ config('app.debug') ? '开启' : '关闭' }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-md4">
+        <div class="layui-col-xs12 layui-col-md4">
             <div class="system-info-card layui-card">
                 <div class="layui-card-header">
                     <i class="layui-icon layui-icon-component"></i> 引用扩展
@@ -311,167 +448,65 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="layui-row layui-col-space10">
-        <!-- 系统核心模块 -->
-        <div class="layui-col-md6">
+        <div class="layui-col-xs12 layui-col-md4">
             <div class="system-info-card layui-card">
                 <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-app"></i> 系统核心模块
+                    <i class="layui-icon layui-icon-component"></i> 开发环境
                 </div>
-                <div class="layui-card-body" style="padding: 10px;">
-                    <div class="layui-row layui-col-space8">
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/admin')"
-                                <i class="layui-icon layui-icon-user module-icon"></i>
-                                <span class="module-title">权限管理</span>
-                                <div class="module-desc">管理员、角色、权限</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/user')"
-                                <i class="layui-icon layui-icon-group module-icon"></i>
-                                <span class="module-title">用户管理</span>
-                                <div class="module-desc">前台用户管理</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/upload')"
-                                <i class="layui-icon layui-icon-upload module-icon"></i>
-                                <span class="module-title">文件管理</span>
-                                <div class="module-desc">文件上传、附件</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/config')">
-                                <i class="layui-icon layui-icon-set module-icon"></i>
-                                <span class="module-title">系统配置</span>
-                                <div class="module-desc">系统参数配置</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/menu')">
-                                <i class="layui-icon layui-icon-list module-icon"></i>
-                                <span class="module-title">菜单管理</span>
-                                <div class="module-desc">系统菜单配置</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/dictionary')">
-                                <i class="layui-icon layui-icon-template module-icon"></i>
-                                <span class="module-title">字典管理</span>
-                                <div class="module-desc">数据字典管理</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/cache')">
-                                <i class="layui-icon layui-icon-engine module-icon"></i>
-                                <span class="module-title">缓存管理</span>
-                                <div class="module-desc">缓存配置监控</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="module-card" onclick="openModule('{{ lpadmin_url_prefix() }}/log')"
-                                <i class="layui-icon layui-icon-log module-icon"></i>
-                                <span class="module-title">日志管理</span>
-                                <div class="module-desc">系统操作日志</div>
-                            </div>
-                        </div>
+                <div class="layui-card-body" style="padding: 10px 15px;">
+                    <div class="info-item">
+                        <span class="info-label">数据库</span>
+                        <span class="info-value">MySQL</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">缓存驱动</span>
+                        <span class="info-value">{{ config('cache.default') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">队列驱动</span>
+                        <span class="info-value">{{ config('queue.default') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">会话驱动</span>
+                        <span class="info-value">{{ config('session.driver') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">调试模式</span>
+                        <span class="info-value">{{ config('app.debug') ? '开启' : '关闭' }}</span>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- 开发文档入口 -->
-        <div class="layui-col-md6">
+        <div class="layui-col-xs12 layui-col-md4">
             <div class="system-info-card layui-card">
                 <div class="layui-card-header">
-                    <i class="layui-icon layui-icon-read"></i> 核心开发文档
+                    <i class="layui-icon layui-icon-engine"></i> 系统信息
                 </div>
-                <div class="layui-card-body" style="padding: 8px 15px;">
-                    <div class="layui-row layui-col-space8">
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="doc-card" onclick="openDoc('README.md')">
-                                <i class="layui-icon layui-icon-file doc-icon"></i>
-                                <span class="doc-title">项目介绍</span>
-                                <div class="doc-desc">系统简介、特性说明</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="doc-card" onclick="openDoc('INSTALL.md')">
-                                <i class="layui-icon layui-icon-download-circle doc-icon"></i>
-                                <span class="doc-title">安装指南</span>
-                                <div class="doc-desc">环境要求、安装步骤</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="doc-card" onclick="openDoc('DEVELOPMENT.md')">
-                                <i class="layui-icon layui-icon-code-circle doc-icon"></i>
-                                <span class="doc-title">开发文档</span>
-                                <div class="doc-desc">开发规范、代码结构</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="doc-card" onclick="openDoc('API.md')">
-                                <i class="layui-icon layui-icon-link doc-icon"></i>
-                                <span class="doc-title">API接口</span>
-                                <div class="doc-desc">接口文档、参数说明</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="doc-card" onclick="openDoc('DEPLOYMENT.md')">
-                                <i class="layui-icon layui-icon-release doc-icon"></i>
-                                <span class="doc-title">部署指南</span>
-                                <div class="doc-desc">生产环境部署</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="doc-card" onclick="openDoc('QUICKSTART.md')">
-                                <i class="layui-icon layui-icon-play doc-icon"></i>
-                                <span class="doc-title">快速开始</span>
-                                <div class="doc-desc">快速上手指南</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="doc-card" onclick="openDoc('CHANGELOG.md')">
-                                <i class="layui-icon layui-icon-log doc-icon"></i>
-                                <span class="doc-title">更新日志</span>
-                                <div class="doc-desc">版本更新记录</div>
-                            </div>
-                        </div>
-                        <div class="layui-col-xs6 layui-col-md3">
-                            <div class="doc-card" onclick="openDoc('architecture/database-design.md')">
-                                <i class="layui-icon layui-icon-template-1 doc-icon"></i>
-                                <span class="doc-title">数据库设计</span>
-                                <div class="doc-desc">数据表结构设计</div>
-                            </div>
-                        </div>
+                <div class="layui-card-body" style="padding: 10px 15px;">
+                    <div class="info-item">
+                        <span class="info-label">系统名称</span>
+                        <span class="info-value">LPadmin</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Laravel版本</span>
+                        <span class="info-value">{{ app()->version() }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">PHP版本</span>
+                        <span class="info-value">{{ PHP_VERSION }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">操作系统</span>
+                        <span class="info-value">{{ PHP_OS }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">运行环境</span>
+                        <span class="info-value">{{ app()->environment() }}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- 数据趋势图表 -->
-    <div class="layui-row layui-col-space10">
-        <div class="layui-col-md8">
-            <div class="chart-container">
-                <div class="chart-title">
-                    <i class="layui-icon layui-icon-chart"></i> 系统访问趋势
-                </div>
-                <div id="trend-chart" style="height: 250px;"></div>
-            </div>
-        </div>
-        <div class="layui-col-md4">
-            <div class="chart-container">
-                <div class="chart-title">
-                    <i class="layui-icon layui-icon-chart-screen"></i> 模块使用分布
-                </div>
-                <div id="pie-chart" style="height: 250px;"></div>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <script src="/static/admin/component/layui/layui.js"></script>
@@ -492,195 +527,244 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
     });
 
     // 数字动画效果
-    count.up("admin-count", {
-        time: 2000,
-        num: {{ $statistics['system']['admin_count'] ?? 0 }},
-        bit: 0,
-        regulator: 10
-    });
-
     count.up("user-count", {
         time: 2000,
-        num: {{ $statistics['system']['user_count'] ?? 0 }},
-        bit: 0,
-        regulator: 50
-    });
-
-    count.up("role-count", {
-        time: 2000,
-        num: {{ $statistics['system']['role_count'] ?? 0 }},
-        bit: 0,
-        regulator: 5
-    });
-
-    count.up("rule-count", {
-        time: 2000,
-        num: {{ $statistics['system']['rule_count'] ?? 0 }},
+        num: {{ $statistics['blog']['user_count'] ?? 0 }},
         bit: 0,
         regulator: 10
     });
+
+    count.up("post-count", {
+        time: 2000,
+        num: {{ $statistics['blog']['post_count'] ?? 0 }},
+        bit: 0,
+        regulator: 10
+    });
+
+    count.up("like-count", {
+        time: 2000,
+        num: {{ $statistics['blog']['like_count'] ?? 0 }},
+        bit: 0,
+        regulator: 10
+    });
+
+    count.up("comment-count", {
+        time: 2000,
+        num: {{ $statistics['blog']['comment_count'] ?? 0 }},
+        bit: 0,
+        regulator: 10
+    });
+
+    count.up("favorite-count", {
+        time: 2000,
+        num: {{ $statistics['blog']['favorite_count'] ?? 0 }},
+        bit: 0,
+        regulator: 10
+    });
+
+    // 加载访问量前十页面
+    function loadTopPages() {
+        $.get('{{ route("lpadmin.dashboard.top_pages") }}', { lang: 'cn' }, function(res) {
+            if (res.code === 0 && res.data) {
+                const list = $('#top-pages-list');
+                list.empty();
+                
+                if (res.data.length === 0) {
+                    list.html('<li class="top-pages-item" style="text-align: center; padding: 20px; color: #999;">暂无数据</li>');
+                    return;
+                }
+                
+                res.data.forEach(function(page, index) {
+                    const rank = index + 1;
+                    const item = $('<li class="top-pages-item"></li>');
+                    const blogUrl = '/' + page.slug;
+                    item.html(
+                        '<span class="top-pages-rank">' + rank + '</span>' +
+                        '<div class="top-pages-content">' +
+                        '<div class="top-pages-title">' +
+                        '<a href="' + blogUrl + '" target="_blank" title="' + (page.title || '') + '">' + (page.title || '无标题') + '</a>' +
+                        '</div>' +
+                        '<div class="top-pages-meta">' +
+                        '<span class="top-pages-views"><i class="layui-icon layui-icon-eye"></i> ' + (page.view_count || 0) + '</span>' +
+                        '<span>' + (page.published_at || '') + '</span>' +
+                        '</div>' +
+                        '</div>'
+                    );
+                    list.append(item);
+                });
+            } else {
+                $('#top-pages-list').html('<li class="top-pages-item" style="text-align: center; padding: 20px; color: #999;">加载失败</li>');
+            }
+        }).fail(function() {
+            $('#top-pages-list').html('<li class="top-pages-item" style="text-align: center; padding: 20px; color: #999;">加载失败</li>');
+        });
+    }
+
+    // 初始加载访问量前十页面
+    loadTopPages();
 
     // 初始化趋势图表
     const trendChart = echarts.init(document.getElementById('trend-chart'));
-    const trendOption = {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-                type: 'cross',
-                label: {
-                    backgroundColor: '#6a7985'
-                }
+    
+    // 加载趋势数据
+    function loadTrendData(days = 7) {
+        $.get('{{ route("lpadmin.dashboard.trend_data") }}', { days: days }, function(res) {
+            if (res.code === 0 && res.data) {
+                const data = res.data;
+                const option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
+                    legend: {
+                        data: ['用户数', '点赞数', '评论数', '收藏数'],
+                        top: 10
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        top: '15%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: data.dates.map(function(date) {
+                            // 格式化日期显示，只显示月-日
+                            const d = new Date(date);
+                            return (d.getMonth() + 1) + '-' + d.getDate();
+                        })
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name: '用户数',
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'rgba(30, 159, 255, 0.8)'
+                                    }, {
+                                        offset: 1, color: 'rgba(30, 159, 255, 0.1)'
+                                    }]
+                                }
+                            },
+                            data: data.user,
+                            itemStyle: {
+                                color: '#1E9FFF'
+                            }
+                        },
+                        {
+                            name: '点赞数',
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'rgba(245, 87, 108, 0.8)'
+                                    }, {
+                                        offset: 1, color: 'rgba(245, 87, 108, 0.1)'
+                                    }]
+                                }
+                            },
+                            data: data.like,
+                            itemStyle: {
+                                color: '#F5576C'
+                            }
+                        },
+                        {
+                            name: '评论数',
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'rgba(67, 233, 123, 0.8)'
+                                    }, {
+                                        offset: 1, color: 'rgba(67, 233, 123, 0.1)'
+                                    }]
+                                }
+                            },
+                            data: data.comment,
+                            itemStyle: {
+                                color: '#43E97B'
+                            }
+                        },
+                        {
+                            name: '收藏数',
+                            type: 'line',
+                            smooth: true,
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: 'rgba(255, 193, 7, 0.8)'
+                                    }, {
+                                        offset: 1, color: 'rgba(255, 193, 7, 0.1)'
+                                    }]
+                                }
+                            },
+                            data: data.favorite,
+                            itemStyle: {
+                                color: '#FFC107'
+                            }
+                        }
+                    ]
+                };
+                trendChart.setOption(option);
+            } else {
+                layer.msg('加载趋势数据失败', {icon: 2});
             }
-        },
-        legend: {
-            data: ['访问量', '用户数', '操作数']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: false,
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                name: '访问量',
-                type: 'line',
-                stack: '总量',
-                smooth: true,
-                areaStyle: {
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [{
-                            offset: 0, color: 'rgba(102, 126, 234, 0.8)'
-                        }, {
-                            offset: 1, color: 'rgba(102, 126, 234, 0.1)'
-                        }]
-                    }
-                },
-                data: [120, 132, 101, 134, 90, 230, 210]
-            },
-            {
-                name: '用户数',
-                type: 'line',
-                stack: '总量',
-                smooth: true,
-                areaStyle: {
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [{
-                            offset: 0, color: 'rgba(245, 87, 108, 0.8)'
-                        }, {
-                            offset: 1, color: 'rgba(245, 87, 108, 0.1)'
-                        }]
-                    }
-                },
-                data: [220, 182, 191, 234, 290, 330, 310]
-            },
-            {
-                name: '操作数',
-                type: 'line',
-                stack: '总量',
-                smooth: true,
-                areaStyle: {
-                    color: {
-                        type: 'linear',
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [{
-                            offset: 0, color: 'rgba(67, 233, 123, 0.8)'
-                        }, {
-                            offset: 1, color: 'rgba(67, 233, 123, 0.1)'
-                        }]
-                    }
-                },
-                data: [150, 232, 201, 154, 190, 330, 410]
-            }
-        ]
-    };
-    trendChart.setOption(trendOption);
+        }).fail(function() {
+            layer.msg('加载趋势数据失败', {icon: 2});
+        });
+    }
 
-    // 初始化饼图
-    const pieChart = echarts.init(document.getElementById('pie-chart'));
-    const pieOption = {
-        tooltip: {
-            trigger: 'item'
-        },
-        legend: {
-            orient: 'vertical',
-            left: 'left'
-        },
-        series: [
-            {
-                name: '模块使用',
-                type: 'pie',
-                radius: '50%',
-                data: [
-                    { value: 1048, name: '用户管理' },
-                    { value: 735, name: '权限管理' },
-                    { value: 580, name: '文件管理' },
-                    { value: 484, name: '系统配置' },
-                    { value: 300, name: '其他模块' }
-                ],
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
-                }
-            }
-        ]
-    };
-    pieChart.setOption(pieOption);
+    // 初始加载7天数据
+    loadTrendData(7);
 
     // 响应式图表
-    window.addEventListener('resize', function() {
-        trendChart.resize();
-        pieChart.resize();
+    function resizeChart() {
+        if (trendChart) {
+            trendChart.resize();
+        }
+    }
+    
+    window.addEventListener('resize', resizeChart);
+    
+    // 移动端横竖屏切换时重新调整图表
+    window.addEventListener('orientationchange', function() {
+        setTimeout(resizeChart, 100);
     });
 });
-
-// 打开模块
-function openModule(url) {
-    const index = parent.layer.open({
-        type: 2,
-        title: '模块管理',
-        content: url,
-        area: ['90%', '90%'],
-        maxmin: true
-    });
-    parent.layer.full(index);
-}
-
-// 打开文档
-function openDoc(docPath) {
-    const index = parent.layer.open({
-        type: 2,
-        title: '开发文档 - ' + docPath,
-        content: '{{ lpadmin_url_prefix() }}/doc/view?file=' + encodeURIComponent(docPath),
-        area: ['90%', '90%'],
-        maxmin: true
-    });
-    parent.layer.full(index);
-}
 </script>
 </body>
 </html>

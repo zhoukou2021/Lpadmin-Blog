@@ -53,24 +53,38 @@ class ConfigHelper
     {
         $cacheKey = 'lpadmin_option_i18n_' . $name . '_' . $lang;
 
-        return Cache::remember($cacheKey, 3600, function () use ($name, $lang, $default) {
+        // 先检查缓存
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+        
+        // 从数据库获取
             $option = Option::where('name', $name)->first();
             
             if (!$option) {
+            // 如果配置不存在，使用极短缓存时间（60秒）
+            // 这样新部署时，即使缓存了空值，也能很快刷新
+            Cache::put($cacheKey, $default, 60);
                 return $default;
             }
             
+        // 解析配置值
+        $value = $default;
+        if ($option->is_i18n && $option->value) {
             // 如果是多语言配置
-            if ($option->is_i18n && $option->value) {
                 $data = json_decode($option->value, true);
                 if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
-                    return $data[$lang] ?? (array_values($data)[0] ?? $default);
-                }
+                $value = $data[$lang] ?? (array_values($data)[0] ?? $default);
             }
-            
+        } else {
             // 非多语言配置，直接返回值
-            return $option->value ?: $default;
-        });
+            $value = $option->value ?: $default;
+        }
+        
+        // 缓存有效数据（3600秒）
+        Cache::put($cacheKey, $value, 3600);
+        
+        return $value;
     }
 
     /**
