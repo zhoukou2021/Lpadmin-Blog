@@ -269,7 +269,7 @@ Route::group($groupConfig, function () {
                 Route::get('/config', [\App\Http\Controllers\LPadmin\Blog\DeepSeekController::class, 'index'])->name('config');
                 Route::post('/config', [\App\Http\Controllers\LPadmin\Blog\DeepSeekController::class, 'store'])->name('config.store');
                 Route::get('/config/data', [\App\Http\Controllers\LPadmin\Blog\DeepSeekController::class, 'getConfig'])->name('config.data');
-                Route::post('/generate', [\App\Http\Controllers\LPadmin\Blog\DeepSeekController::class, 'generate'])->name('generate');
+                Route::any('/generate', [\App\Http\Controllers\LPadmin\Blog\DeepSeekController::class, 'generate'])->name('generate');
             });
             // 文章
             Route::get('post/select', [\App\Http\Controllers\LPadmin\Blog\PostController::class, 'select'])->name('post.select');
