@@ -233,8 +233,8 @@
         width: 20px;
         height: 20px;
         font-size: 11px;
-        margin-right: 8px;
-    }
+    margin-right: 8px;
+}
     .top-pages-title {
         font-size: 12px;
         margin-bottom: 3px;
@@ -612,103 +612,103 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
             if (res.code === 0 && res.data) {
                 const data = res.data;
                 const option = {
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'cross',
-                            label: {
-                                backgroundColor: '#6a7985'
-                            }
-                        }
-                    },
-                    legend: {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        },
+        legend: {
                         data: ['用户数', '点赞数', '评论数', '收藏数'],
                         top: 10
-                    },
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
                         top: '15%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type: 'category',
-                        boundaryGap: false,
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
                         data: data.dates.map(function(date) {
                             // 格式化日期显示，只显示月-日
                             const d = new Date(date);
                             return (d.getMonth() + 1) + '-' + d.getDate();
                         })
-                    },
-                    yAxis: {
-                        type: 'value'
-                    },
-                    series: [
-                        {
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
                             name: '用户数',
-                            type: 'line',
-                            smooth: true,
-                            areaStyle: {
-                                color: {
-                                    type: 'linear',
-                                    x: 0,
-                                    y: 0,
-                                    x2: 0,
-                                    y2: 1,
-                                    colorStops: [{
+                type: 'line',
+                smooth: true,
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
                                         offset: 0, color: 'rgba(30, 159, 255, 0.8)'
-                                    }, {
+                        }, {
                                         offset: 1, color: 'rgba(30, 159, 255, 0.1)'
-                                    }]
-                                }
-                            },
+                        }]
+                    }
+                },
                             data: data.user,
                             itemStyle: {
                                 color: '#1E9FFF'
                             }
-                        },
-                        {
+            },
+            {
                             name: '点赞数',
-                            type: 'line',
-                            smooth: true,
-                            areaStyle: {
-                                color: {
-                                    type: 'linear',
-                                    x: 0,
-                                    y: 0,
-                                    x2: 0,
-                                    y2: 1,
-                                    colorStops: [{
-                                        offset: 0, color: 'rgba(245, 87, 108, 0.8)'
-                                    }, {
-                                        offset: 1, color: 'rgba(245, 87, 108, 0.1)'
-                                    }]
-                                }
-                            },
+                type: 'line',
+                smooth: true,
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: 'rgba(245, 87, 108, 0.8)'
+                        }, {
+                            offset: 1, color: 'rgba(245, 87, 108, 0.1)'
+                        }]
+                    }
+                },
                             data: data.like,
                             itemStyle: {
                                 color: '#F5576C'
                             }
-                        },
-                        {
+            },
+            {
                             name: '评论数',
-                            type: 'line',
-                            smooth: true,
-                            areaStyle: {
-                                color: {
-                                    type: 'linear',
-                                    x: 0,
-                                    y: 0,
-                                    x2: 0,
-                                    y2: 1,
-                                    colorStops: [{
-                                        offset: 0, color: 'rgba(67, 233, 123, 0.8)'
-                                    }, {
-                                        offset: 1, color: 'rgba(67, 233, 123, 0.1)'
-                                    }]
-                                }
-                            },
+                type: 'line',
+                smooth: true,
+                areaStyle: {
+                    color: {
+                        type: 'linear',
+                        x: 0,
+                        y: 0,
+                        x2: 0,
+                        y2: 1,
+                        colorStops: [{
+                            offset: 0, color: 'rgba(67, 233, 123, 0.8)'
+                        }, {
+                            offset: 1, color: 'rgba(67, 233, 123, 0.1)'
+                        }]
+                    }
+                },
                             data: data.comment,
                             itemStyle: {
                                 color: '#43E97B'
@@ -733,12 +733,12 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
                                 }
                             },
                             data: data.favorite,
-                            itemStyle: {
+                    itemStyle: {
                                 color: '#FFC107'
-                            }
-                        }
-                    ]
-                };
+                }
+            }
+        ]
+    };
                 trendChart.setOption(option);
             } else {
                 layer.msg('加载趋势数据失败', {icon: 2});
@@ -754,7 +754,7 @@ layui.use(['layer', 'element', 'echarts', 'count', 'jquery'], function() {
     // 响应式图表
     function resizeChart() {
         if (trendChart) {
-            trendChart.resize();
+        trendChart.resize();
         }
     }
     

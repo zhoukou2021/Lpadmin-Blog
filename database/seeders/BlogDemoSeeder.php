@@ -18,9 +18,9 @@ class BlogDemoSeeder extends Seeder
         $categoriesData = [
             // 一级分类
             [
-                'parent_id' => 0,
-                'sort' => 100,
-                'visible' => true,
+            'parent_id' => 0,
+            'sort' => 100,
+            'visible' => true,
                 'name' => ['cn' => '技术', 'en' => 'Technology', 'tw' => '科技'],
                 'slug' => 'technology',
                 'description' => ['cn' => '技术分享', 'en' => 'Tech sharing', 'tw' => '科技分享'],

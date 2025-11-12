@@ -17,11 +17,18 @@ class PostController extends Controller
         }
         if ($request->filled('q')) {
             $q = $request->q;
-            $query->where(function($w) use ($q){
-                $w->where('title->zh', 'like', "%$q%")
-                  ->orWhere('title->en', 'like', "%$q%")
-                  ->orWhere('summary->zh', 'like', "%$q%")
-                  ->orWhere('summary->en', 'like', "%$q%");
+            $searchTerm = '%' . $q . '%';
+            $query->where(function($w) use ($searchTerm){
+                // 使用 MySQL 的 JSON 操作符 ->> 来查询 JSON 字段（MySQL 5.7+）
+                // 支持查询 title 和 summary 的所有语言版本（zh, en, cn, tw）
+                $w->whereRaw('title->>"$.zh" LIKE ?', [$searchTerm])
+                  ->orWhereRaw('title->>"$.en" LIKE ?', [$searchTerm])
+                  ->orWhereRaw('title->>"$.cn" LIKE ?', [$searchTerm])
+                  ->orWhereRaw('title->>"$.tw" LIKE ?', [$searchTerm])
+                  ->orWhereRaw('summary->>"$.zh" LIKE ?', [$searchTerm])
+                  ->orWhereRaw('summary->>"$.en" LIKE ?', [$searchTerm])
+                  ->orWhereRaw('summary->>"$.cn" LIKE ?', [$searchTerm])
+                  ->orWhereRaw('summary->>"$.tw" LIKE ?', [$searchTerm]);
             });
         }
         if ($request->filled('date_start')) {

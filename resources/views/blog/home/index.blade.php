@@ -207,7 +207,7 @@
 @section('head')
   @include('blog.components.banner-3d-styles')
   @include('blog.components.banner-3d-script', ['banners' => $banners ?? [], 'bannerId' => 'banner'])
-  <style>
+<style>
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -217,8 +217,8 @@
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-  }
-  </style>
+    }
+</style>
   <script>
     // 全局函数：初始化点赞按钮
     function initLikeButtons(){
@@ -575,8 +575,8 @@
           initTabs();
           initInfiniteScroll();
         }, 100);
-      }
-    })();
+    }
+  })();
   </script>
 @endsection
 

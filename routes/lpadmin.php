@@ -11,8 +11,6 @@ use App\Http\Controllers\LPadmin\UserController;
 use App\Http\Controllers\LPadmin\MenuController;
 use App\Http\Controllers\LPadmin\ConfigController;
 use App\Http\Controllers\LPadmin\CacheController;
-use App\Http\Controllers\LPadmin\DocController;
-use App\Http\Controllers\LPadmin\Blog\DeepSeekController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,17 +58,7 @@ Route::group($groupConfig, function () {
 
     // 生成验证码图片
     Route::get('captcha', [CaptchaController::class, 'generate'])->name('captcha');
-    /*
-    |----------------------------------------------------------------------
-    | 文档管理
-    |----------------------------------------------------------------------
-    */
-    Route::prefix('doc')->name('doc.')->group(function () {
-        Route::get('/', [DocController::class, 'index'])->name('index'); // 文档列表页面
-        Route::get('view', [DocController::class, 'show'])->name('view'); // 查看文档
-        Route::get('download', [DocController::class, 'download'])->name('download'); // 下载文档
-    });
-
+    
     /*
     |--------------------------------------------------------------------------
     | 需要登录验证的路由
