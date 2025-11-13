@@ -1,44 +1,5 @@
 {{-- 
   3D 百叶窗焦点图样式组件
 --}}
-<style>
-    /* 全屏横幅：左右出血 */
-    .full-bleed{width:100vw;margin-left:calc(50% - 50vw)}
-    .banner{margin:0;position:relative;margin-bottom: 20px;}
-    .banner-3d{position:relative;overflow:hidden}
-    .banner-3d,.banner-3d .stage{height:500px}
-    @media (max-width: 768px){ .banner-3d,.banner-3d .stage{height:150px} }
-    .banner-3d .stage{position:relative}
-    .banner-3d .slice{position:absolute;top:0;bottom:0;will-change:transform,opacity;transform-origin:left center;backface-visibility:hidden}
-    .banner-dots{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;display:flex;align-items:center}
-    .banner-3d .nav-dot{height:6px;width:24px;border-radius:6px;background:rgba(255,255,255,.5);margin:0 6px;display:inline-block;transition:all .25s ease;box-shadow:0 0 0 1px rgba(0,0,0,.05) inset}
-    .banner-3d .nav-dot.active{width:36px;background:var(--primary)}
-    .banner-3d .arrow{position:absolute;top:50%;transform:translateY(-50%);width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.9);color:#2ca36a;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;z-index:10;font-size:28px;backdrop-filter:blur(4px);box-shadow:0 4px 12px rgba(0,0,0,.15);transition:all .3s ease;border:2px solid rgba(44,163,106,.1);opacity:0;pointer-events:none}
-    .banner-3d:hover .arrow{opacity:1;pointer-events:auto}
-    .banner-3d .arrow:hover{background:#fff;color:#1e8050;box-shadow:0 6px 20px rgba(44,163,106,.25);transform:translateY(-50%) scale(1.1);border-color:rgba(44,163,106,.3)}
-    .banner-3d .arrow:active{transform:translateY(-50%) scale(1.05)}
-    .banner-3d .arrow i{font-weight:bold;pointer-events:none}
-    .banner-3d .arrow-left{left:20px}
-    .banner-3d .arrow-right{right:20px}
-    .banner-3d .slice{pointer-events:auto;z-index:1}
-    .banner-text-layer{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px;z-index:2;pointer-events:none}
-    .banner-text-wrapper{background:rgba(0,0,0,0.1);padding:24px 32px;border-radius:0px;max-width:90%;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-    .banner-title{margin:0 0 16px 0;font-size:36px;font-weight:700;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,0.3);text-align:center;line-height:1.3}
-    .banner-content{margin:0;font-size:18px;font-weight:400;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,0.3);text-align:center;line-height:1.6;max-width:800px}
-    @media (max-width: 768px){
-      .banner-3d .arrow{width:44px;height:44px;font-size:20px;left:12px;right:12px}
-      .banner-3d .nav-dot{width:14px;height:4px}
-      .banner-3d .nav-dot.active{width:22px}
-      .banner-text-layer{padding:12px 16px}
-      .banner-text-wrapper{padding:16px 20px;border-radius:8px;max-width:95%}
-      .banner-title{font-size:18px;margin-bottom:8px;line-height:1.4;font-weight:600;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;max-width:100%}
-      .banner-content{font-size:12px;line-height:1.5;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;max-width:100%}
-    }
-    @media (max-width: 480px){
-      .banner-text-layer{padding:10px 12px}
-      .banner-text-wrapper{padding:12px 16px;border-radius:0px}
-      .banner-title{font-size:18px;margin-bottom:6px;-webkit-line-clamp:2;line-clamp:2}
-      .banner-content{font-size:12px;-webkit-line-clamp:2;line-clamp:2}
-    }
-</style>
+<link rel="stylesheet" href="/static/blog/css/banner-3d.css" />
 

@@ -1,0 +1,51 @@
+/**
+ * 博客首页样式
+ */
+
+/* 加载动画 */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 无限滚动加载器 */
+.infinite-scroll-loader {
+  animation: fadeIn .3s ease;
+  display: none;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #e6eee6;
+  margin-top: 20px;
+}
+
+.infinite-scroll-end {
+  animation: fadeIn .3s ease;
+  display: none;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #e6eee6;
+  margin-top: 20px;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e6eee6;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+.loading-text {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+/* 点赞和收藏按钮交互样式 */
+.post-like-item,
+.post-favorite-item {
+  cursor: pointer;
+  user-select: none;
+}
+

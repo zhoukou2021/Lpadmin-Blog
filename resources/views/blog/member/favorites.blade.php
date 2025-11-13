@@ -96,16 +96,16 @@
 
           <!-- 无限滚动加载器 -->
           @if($favorites->hasMorePages())
-            <div id="infiniteScrollLoader" class="infinite-scroll-loader" style="display:none;padding:20px;text-align:center;border-top:1px solid #e6eee6;margin-top:20px;">
-              <div style="color:#999;"><i class="bi bi-arrow-repeat" style="animation:spin 1s linear infinite;display:inline-block;margin-right:8px;"></i>加载中...</div>
+            <div id="infiniteScrollLoader" class="infinite-scroll-loader">
+              <div class="loading-text"><i class="bi bi-arrow-repeat loading-icon"></i>加载中...</div>
             </div>
-            <div id="infiniteScrollEnd" class="infinite-scroll-end" style="display:none;padding:20px;text-align:center;border-top:1px solid #e6eee6;margin-top:20px;color:#999;">没有更多了</div>
+            <div id="infiniteScrollEnd" class="infinite-scroll-end">没有更多了</div>
           @else
-            <div id="infiniteScrollEnd" class="infinite-scroll-end" style="padding:20px;text-align:center;border-top:1px solid #e6eee6;margin-top:20px;color:#999;">没有更多了</div>
+            <div id="infiniteScrollEnd" class="infinite-scroll-end">没有更多了</div>
           @endif
         @else
-          <div style="padding:40px;text-align:center;color:#999;">
-            <i class="bi bi-star" style="font-size:48px;margin-bottom:12px;display:block;opacity:0.5"></i>
+          <div class="member-empty-state">
+            <i class="bi bi-star"></i>
             <div>{{ __('blog.no_favorites') }}</div>
           </div>
         @endif
@@ -117,188 +117,15 @@
 
 @section('head')
   @include('blog.components.banner-styles', ['cssClass' => 'member-banner'])
-<style>
-  /* 会员中心菜单样式 */
-  .member-menu {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .member-menu-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    color: var(--ink);
-    text-decoration: none;
-    border-bottom: 1px solid #f0f0f0;
-    transition: all .2s;
-  }
-  
-  .member-menu-item:last-child {
-    border-bottom: none;
-  }
-  
-  .member-menu-item:hover {
-    background: var(--primary-weak);
-    color: var(--primary);
-  }
-  
-  .member-menu-item.active {
-    background: var(--primary-weak);
-    color: var(--primary);
-    font-weight: 600;
-  }
-  
-  .member-menu-item i {
-    font-size: 16px;
-    width: 20px;
-    text-align: center;
-  }
-
-  .infinite-scroll-loader{animation:fadeIn .3s ease}
-  .infinite-scroll-end{animation:fadeIn .3s ease}
-  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-  @media (max-width: 767.98px) {
-    .infinite-scroll-loader{padding:16px}
-    .infinite-scroll-end{padding:16px}
-  }
-</style>
-<script>
-  (function(){
-    var currentPage = 1;
-    var isLoading = false;
-    var hasMore = {{ $favorites->hasMorePages() ? 'true' : 'false' }};
-    
-    // 渲染文章卡片HTML
-    function renderPostHTML(post){
-      var html = '<div class="post-card">';
-      
-      var postUrl = post.slug ? '/' + post.slug : '#';
-      if (post.cover) {
-        html += '<div class="post-cover"><a href="' + postUrl + '"><img src="' + post.cover + '" alt="' + (post.title || '') + '"></a></div>';
-      }
-      
-      html += '<div class="post-content">';
-      html += '<h3 class="post-title"><a href="' + postUrl + '">' + (post.title || '') + '</a></h3>';
-      
-      if (post.summary) {
-        html += '<div class="post-summary">' + (post.summary || '') + '</div>';
-      }
-      
-      html += '<div class="post-meta">';
-      if (post.category_name) {
-        var categoryUrl = post.category_slug ? '/' + post.category_slug : '#';
-        html += '<a href="' + categoryUrl + '" class="post-category"><i class="bi bi-folder"></i> ' + post.category_name + '</a>';
-      }
-      
-      var publishedDate = '';
-      if (post.published_at) {
-        var date = new Date(post.published_at);
-        publishedDate = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
-      }
-      html += '<div class="post-meta-item"><i class="bi bi-calendar3"></i> ' + publishedDate + '</div>';
-      html += '<div class="post-meta-item"><i class="bi bi-eye"></i> ' + (post.view_count || 0) + '</div>';
-      html += '<div class="post-meta-item"><i class="bi bi-chat-dots"></i> ' + (post.comments_count || 0) + '</div>';
-      html += '<div class="post-meta-item post-like-item" data-post-id="' + (post.id || '') + '" style="cursor:pointer;user-select:none;"><i class="bi bi-hand-thumbs-up"></i> <span class="likes-count">' + (post.likes_count || 0) + '</span></div>';
-      html += '<div class="post-meta-item post-favorite-item" data-post-id="' + (post.id || '') + '" style="cursor:pointer;user-select:none;"><i class="bi bi-star-fill"></i> <span class="favorites-count">' + (post.favorites_count || 0) + '</span></div>';
-      html += '</div>';
-      
-      if (post.tags && post.tags.length > 0) {
-        html += '<div class="post-tags">';
-        post.tags.forEach(function(tag){
-          var tagUrl = tag.slug ? '/' + tag.slug : '#';
-          html += '<a href="' + tagUrl + '" class="post-tag">#' + (tag.name || '') + '</a>';
-        });
-        html += '</div>';
-      }
-      
-      html += '</div></div>';
-      return html;
-    }
-    
-    // 加载更多数据
-    function loadMorePosts(){
-      if (isLoading || !hasMore) return;
-      
-      isLoading = true;
-      var loader = document.getElementById('infiniteScrollLoader');
-      var end = document.getElementById('infiniteScrollEnd');
-      if (loader) loader.style.display = 'block';
-      if (end) end.style.display = 'none';
-      
-      currentPage++;
-      var url = '{{ route("site.member.favorites.loadMore") }}?page=' + currentPage;
-      
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      })
-      .then(function(response){
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(function(data){
-        if (data.code === 0 && data.data && data.data.length > 0) {
-          var container = document.querySelector('.posts-container');
-          if (container) {
-            data.data.forEach(function(post){
-              container.insertAdjacentHTML('beforeend', renderPostHTML(post));
-            });
-          }
-          hasMore = data.has_more || false;
-          if (!hasMore && end) {
-            end.style.display = 'block';
-          }
-        } else {
-          hasMore = false;
-          if (end) end.style.display = 'block';
-        }
-      })
-      .catch(function(error){
-        console.error('Error loading more posts:', error);
-        hasMore = false;
-        if (end) end.style.display = 'block';
-      })
-      .finally(function(){
-        isLoading = false;
-        if (loader) loader.style.display = 'none';
-      });
-    }
-    
-    // 无限滚动监听
-    function initInfiniteScroll(){
-      if (!hasMore) return;
-      
-      var threshold = 200;
-      var ticking = false;
-      
-      function checkScroll(){
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        var windowHeight = window.innerHeight || document.documentElement.clientHeight;
-        var documentHeight = document.documentElement.scrollHeight;
-        
-        if (scrollTop + windowHeight >= documentHeight - threshold) {
-          loadMorePosts();
-        }
-        ticking = false;
-      }
-      
-      window.addEventListener('scroll', function(){
-        if (!ticking) {
-          window.requestAnimationFrame(checkScroll);
-          ticking = true;
-        }
-      }, { passive: true });
-    }
-    
-    initInfiniteScroll();
-  })();
-</script>
+  <link rel="stylesheet" href="/static/blog/css/member.css" />
+  <script src="/static/blog/js/member-infinite-scroll.js"></script>
+  <script src="/static/blog/js/member-posts.js"></script>
+  <script>
+    window.MemberPostsConfig = {
+      type: 'favorites',
+      loadMoreUrl: '{{ route("site.member.favorites.loadMore") }}',
+      hasMore: {{ $favorites->hasMorePages() ? 'true' : 'false' }}
+    };
+  </script>
 @endsection
 
