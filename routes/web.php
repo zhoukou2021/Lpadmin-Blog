@@ -26,6 +26,7 @@ Route::group(['middleware' => ['set.locale']], function () {
     Route::get('/home/load-more', [\App\Http\Controllers\Blog\HomeController::class, 'loadMore'])->name('site.home.loadMore');
     Route::get('/contact', [\App\Http\Controllers\Blog\ContactController::class, 'show'])->name('site.contact.show');
     Route::get('/sitemap', [\App\Http\Controllers\Blog\SitemapController::class, 'index'])->name('site.sitemap');
+    Route::get('/search', [\App\Http\Controllers\Blog\SearchController::class, 'index'])->name('site.search');
     
     // 会员中心路由（需要认证，必须在 /{slug} 之前定义以避免被捕获）
     Route::group(['middleware' => ['auth:web'], 'prefix' => 'member'], function () {

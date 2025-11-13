@@ -60,29 +60,40 @@
                                 </li>
                             @endforeach
                         </ul>
-                        <div class="lang-login">
-                            <form method="get" onsubmit="return false;">
-                                @php($codes = ($langData['codes'] ?? ['cn','en','tw']))
-                                @php($labels = ($langData['labels'] ?? []))
-                                @php($defaultLabels = ['cn' => '简体中文', 'en' => 'English', 'tw' => '繁體中文'])
-                                <select id="langSwitcher" class="form-select form-select-sm">
-                                    @foreach($codes as $code)
-                                        <option value="{{ $code }}" {{ ($lang??'cn')===$code?'selected':'' }}>{{ $labels[$code] ?? ($defaultLabels[$code] ?? $code) }}</option>
-                                    @endforeach
-                                </select>
-                            </form>
-                            @auth('web')
-                                <div class="user-info">
-                                    <a href="{{ route('site.member.profile')}}" class="user-avatar-link">
-                                        <img src="{{ auth('web')->user()->avatar_url }}" alt="{{ auth('web')->user()->nickname }}">
-                                        <span>{{ auth('web')->user()->nickname }}</span>
-                                    </a>
-                                    <a href="javascript:;" onclick="handleLogout()" class="logout-link">{{ __('blog.logout') }}</a>
+                        <div class="navbar-extra">
+                            <form class="navbar-search" action="{{ route('site.search') }}" method="get">
+                                <label for="navbarSearchInput" class="visually-hidden">{{ __('blog.search') }}</label>
+                                <div class="search-input-group">
+                                    <input id="navbarSearchInput" type="search" name="q" value="{{ request('q', '') }}" placeholder="{{ __('blog.search_placeholder') }}" aria-label="{{ __('blog.search') }}">
+                                    <button type="submit" aria-label="{{ __('blog.search') }}">
+                                        <i class="bi bi-search"></i>
+                                    </button>
                                 </div>
-                            @else
-                                <a href="javascript:;" onclick="openAuthModal('login')" class="login-link">{{ __('blog.login') }}</a>
-                                <a href="javascript:;" onclick="openAuthModal('register')" class="register-link">{{ __('blog.register') }}</a>
-                            @endauth
+                            </form>
+                            <div class="lang-login">
+                                <form method="get" onsubmit="return false;">
+                                    @php($codes = ($langData['codes'] ?? ['cn','en','tw']))
+                                    @php($labels = ($langData['labels'] ?? []))
+                                    @php($defaultLabels = ['cn' => '简体中文', 'en' => 'English', 'tw' => '繁體中文'])
+                                    <select id="langSwitcher" class="form-select form-select-sm">
+                                        @foreach($codes as $code)
+                                            <option value="{{ $code }}" {{ ($lang??'cn')===$code?'selected':'' }}>{{ $labels[$code] ?? ($defaultLabels[$code] ?? $code) }}</option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                                @auth('web')
+                                    <div class="user-info">
+                                        <a href="{{ route('site.member.profile')}}" class="user-avatar-link">
+                                            <img src="{{ auth('web')->user()->avatar_url }}" alt="{{ auth('web')->user()->nickname }}">
+                                            <span>{{ auth('web')->user()->nickname }}</span>
+                                        </a>
+                                        <a href="javascript:;" onclick="handleLogout()" class="logout-link">{{ __('blog.logout') }}</a>
+                                    </div>
+                                @else
+                                    <a href="javascript:;" onclick="openAuthModal('login')" class="login-link">{{ __('blog.login') }}</a>
+                                    <a href="javascript:;" onclick="openAuthModal('register')" class="register-link">{{ __('blog.register') }}</a>
+                                @endauth
+                            </div>
                         </div>
                     </div>
                 </div>

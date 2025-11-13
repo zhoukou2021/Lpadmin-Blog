@@ -1,0 +1,19 @@
+/* 搜索页面样式 */
+.search-card{overflow:hidden}
+.search-header{display:flex;flex-direction:column;gap:6px}
+.search-title{margin:0;font-size:22px;font-weight:700;color:var(--ink)}
+.search-summary{margin:0;color:#607066;font-size:14px}
+.search-highlight{color:var(--primary);font-weight:600}
+.search-empty{padding:48px 16px;text-align:center;color:#768478;display:flex;flex-direction:column;align-items:center;gap:12px}
+.search-empty i{font-size:36px;color:var(--primary)}
+.search-tip{margin:0;color:#99a79d;font-size:14px}
+.post-tags{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+.post-tag{font-size:12px;color:var(--primary);background:var(--primary-weak);padding:4px 10px;border-radius:999px;transition:all .2s}
+.post-tag:hover{background:var(--primary);color:#fff}
+.search-pagination{margin-top:16px}
+.search-pagination .pagination{justify-content:center}
+@media (max-width: 575.98px){
+  .search-card .card-hd{padding:16px}
+  .search-card .card-bd{padding:16px 12px}
+  .search-empty{padding:36px 12px}
+}

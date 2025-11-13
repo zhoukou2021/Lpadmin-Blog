@@ -212,23 +212,23 @@
   @include('blog.components.banner-styles', ['cssClass' => 'post-banner'])
   <link rel="stylesheet" href="/static/blog/css/post-detail.css" />
   <script src="/static/blog/js/post-detail.js"></script>
-  <script>
+<script>
     window.PostDetailConfig = {
       commentStoreUrl: '{{ route("site.comment.store", ["post" => $post->id]) }}',
       likeUrlTemplate: '{{ route("site.post.like", ["post" => ":id"]) }}',
       favoriteUrlTemplate: '{{ route("site.post.favorite", ["post" => ":id"]) }}',
       texts: {
-        commentRequired: @json(__('blog.comment_required')),
-        commentMinLength: @json(__('blog.comment_min_length')),
-        commentMaxLength: @json(__('blog.comment_max_length')),
-        submitting: @json(__('blog.submitting')),
-        submitComment: @json(__('blog.submit_comment')),
-        commentSuccess: @json(__('blog.comment_success')),
-        commentFailed: @json(__('blog.comment_failed')),
-        commentLoginRequired: @json(__('blog.comment_login_required')),
-        commentSensitiveWord: @json(__('blog.comment_sensitive_word')),
-        replyTo: @json(__('blog.reply_to'))
+      commentRequired: @json(__('blog.comment_required')),
+      commentMinLength: @json(__('blog.comment_min_length')),
+      commentMaxLength: @json(__('blog.comment_max_length')),
+      submitting: @json(__('blog.submitting')),
+      submitComment: @json(__('blog.submit_comment')),
+      commentSuccess: @json(__('blog.comment_success')),
+      commentFailed: @json(__('blog.comment_failed')),
+      commentLoginRequired: @json(__('blog.comment_login_required')),
+      commentSensitiveWord: @json(__('blog.comment_sensitive_word')),
+      replyTo: @json(__('blog.reply_to'))
       }
     };
-  </script>
+</script>
 @endsection
