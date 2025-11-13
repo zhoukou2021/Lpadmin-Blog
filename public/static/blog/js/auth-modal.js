@@ -18,29 +18,35 @@
       
       if (!this.overlay) return;
       
+      var self = this;
+      
       // 关闭按钮
       var closeBtn = document.getElementById('authModalClose');
       if (closeBtn) {
         closeBtn.addEventListener('click', function(e) {
           e.preventDefault();
           e.stopPropagation();
-          AuthModal.close();
+          self.close();
         });
       }
       
-      // 点击遮罩层关闭
-      this.overlay.addEventListener('click', function(e) {
-        if (e.target === this.overlay) {
-          AuthModal.close();
-        }
-      }.bind(this));
-      
-      // 阻止弹窗内部点击事件冒泡
+      // 阻止弹窗内部点击事件冒泡到 overlay（避免误关闭）
+      // 必须在 overlay 点击事件之前设置，确保事件处理顺序正确
       if (this.modal) {
         this.modal.addEventListener('click', function(e) {
           e.stopPropagation();
         });
       }
+      
+      // 点击遮罩层关闭
+      // 由于 modal 的 stopPropagation，只有点击 overlay 本身时才会触发此事件
+      this.overlay.addEventListener('click', function(e) {
+        // 如果点击的是 overlay 本身（不是 modal 或其子元素），则关闭
+        if (e.target === self.overlay) {
+          e.preventDefault();
+          self.close();
+        }
+      });
       
       // ESC键关闭
       document.addEventListener('keydown', function(e) {
@@ -75,7 +81,8 @@
     open: function(type) {
       type = type || 'login';
       if (this.overlay) {
-        this.overlay.style.display = 'flex';
+        // 使用 setProperty 设置 !important
+        this.overlay.style.setProperty('display', 'flex', 'important');
         document.body.style.overflow = 'hidden';
         this.switchForm(type);
       }
@@ -83,13 +90,16 @@
     
     close: function() {
       if (this.overlay) {
-        this.overlay.style.display = 'none';
+        // 使用 setProperty 设置 !important 确保覆盖 CSS
+        this.overlay.style.setProperty('display', 'none', 'important');
         document.body.style.overflow = '';
       }
     },
     
     isOpen: function() {
-      return this.overlay && this.overlay.style.display !== 'none';
+      if (!this.overlay) return false;
+      var display = window.getComputedStyle(this.overlay).display;
+      return display !== 'none' && display !== '';
     },
     
     switchForm: function(type) {
