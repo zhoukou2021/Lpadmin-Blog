@@ -115,6 +115,11 @@
         </footer>
     </div>
     
+    <!-- 返回顶部按钮 -->
+    <a href="javascript:;" class="to-top-link" id="toTopLink" aria-label="{{ __('blog.back_to_top') ?? '返回顶部' }}">
+        <i class="bi bi-arrow-up"></i>
+    </a>
+    
     <!-- 包含认证弹窗组件 -->
     @include('blog.components.auth-modal')
     

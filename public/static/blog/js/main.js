@@ -94,11 +94,66 @@
     // 将 handleLogout 暴露到全局作用域
     window.handleLogout = handleLogout;
     
+    // 返回顶部功能
+    function initBackToTop() {
+        var toTopLink = document.getElementById('toTopLink');
+        if (!toTopLink) return;
+        
+        // 平滑滚动到顶部
+        function scrollToTop(e) {
+            if (e) {
+                e.preventDefault();
+            }
+            
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // 根据滚动位置显示/隐藏按钮
+        function toggleBackToTop() {
+            var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+            var showThreshold = 300; // 滚动超过300px时显示按钮
+            
+            if (scrollTop > showThreshold) {
+                toTopLink.classList.add('show');
+            } else {
+                toTopLink.classList.remove('show');
+            }
+        }
+        
+        // 绑定点击事件
+        toTopLink.addEventListener('click', scrollToTop);
+        
+        // 监听滚动事件（使用节流优化性能）
+        var ticking = false;
+        function onScroll() {
+            if (!ticking) {
+                window.requestAnimationFrame(function() {
+                    toggleBackToTop();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+        
+        window.addEventListener('scroll', onScroll, { passive: true });
+        
+        // 初始化时检查一次
+        toggleBackToTop();
+    }
+    
     // 初始化
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initLangSwitcher);
-    } else {
+    function init() {
         initLangSwitcher();
+        initBackToTop();
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
     }
 })();
 
